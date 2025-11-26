@@ -35,14 +35,12 @@
     <div id="@ContentId" 
          class="govuk-accordion__section-content" 
          aria-labelledby="@HeadingId"
-         @ref="_contentElement"
          hidden="@(!IsExpanded)">
         @Content
     </div>
 </div>
 
 @code {
-    private ElementReference _contentElement;
     private string HeadingId => $"{ContentId}-heading";
     private string ContentId { get; set; } = $"accordion-section-{Guid.NewGuid():N}";
     private string SummaryId => $"{ContentId}-summary";

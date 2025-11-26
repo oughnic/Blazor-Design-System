@@ -1,5 +1,4 @@
 @namespace Blazor.DesignSystem.Components
-@using Microsoft.AspNetCore.Components.Rendering
 
 <div class="govuk-accordion @CssClass" data-module="govuk-accordion" id="@Id">
     <div class="govuk-accordion__controls">
@@ -84,14 +83,6 @@
     internal void NotifySectionStateChanged()
     {
         StateHasChanged();
-    }
-
-    /// <summary>
-    /// Gets the index of a section (1-based).
-    /// </summary>
-    internal int GetSectionIndex(GovUkAccordionSection section)
-    {
-        return _sections.IndexOf(section) + 1;
     }
 
     private async Task ToggleAll()
