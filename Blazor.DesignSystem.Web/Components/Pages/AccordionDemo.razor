@@ -1,0 +1,86 @@
+@page "/components/accordion"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Accordion - GOV.UK Design System</PageTitle>
+
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper">
+        <h1 class="govuk-heading-xl">Accordion</h1>
+        <p class="govuk-body">The accordion component lets users show and hide sections of related content on a page.</p>
+
+        <h2 class="govuk-heading-l">Example</h2>
+
+        <GovUkAccordion Id="default-example">
+            <GovUkAccordionSection Heading="Writing well for the web">
+                <Content>
+                    <p class="govuk-body">This is the content for Writing well for the web.</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>Use simple, clear language</li>
+                        <li>Write in short sentences</li>
+                        <li>Use active voice</li>
+                    </ul>
+                </Content>
+            </GovUkAccordionSection>
+
+            <GovUkAccordionSection Heading="Writing well for specialists">
+                <Content>
+                    <p class="govuk-body">This is the content for Writing well for specialists.</p>
+                    <p class="govuk-body">You should still use plain English when writing for specialists.</p>
+                </Content>
+            </GovUkAccordionSection>
+
+            <GovUkAccordionSection Heading="Know your audience">
+                <Content>
+                    <p class="govuk-body">This is the content for Know your audience.</p>
+                    <p class="govuk-body">Understanding your users and their needs will help you write better content.</p>
+                </Content>
+            </GovUkAccordionSection>
+
+            <GovUkAccordionSection Heading="How people read">
+                <Content>
+                    <p class="govuk-body">This is the content for How people read.</p>
+                    <p class="govuk-body">People do not read web pages in the same way they read books.</p>
+                </Content>
+            </GovUkAccordionSection>
+        </GovUkAccordion>
+
+        <h2 class="govuk-heading-l govuk-!-margin-top-8">Example with summary text</h2>
+
+        <GovUkAccordion Id="summary-example">
+            <GovUkAccordionSection Heading="Understanding agile project management" 
+                                   Summary="Introductory information about agile frameworks">
+                <Content>
+                    <p class="govuk-body">Agile project management is an iterative approach to planning and guiding project processes.</p>
+                </Content>
+            </GovUkAccordionSection>
+
+            <GovUkAccordionSection Heading="Agile methods" 
+                                   Summary="Popular agile frameworks">
+                <Content>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>Scrum</li>
+                        <li>Kanban</li>
+                        <li>Extreme Programming (XP)</li>
+                    </ul>
+                </Content>
+            </GovUkAccordionSection>
+        </GovUkAccordion>
+
+        <h2 class="govuk-heading-l govuk-!-margin-top-8">Example with one section open</h2>
+
+        <GovUkAccordion Id="expanded-example">
+            <GovUkAccordionSection Heading="Section 1" IsExpanded="true">
+                <Content>
+                    <p class="govuk-body">This section is initially expanded.</p>
+                </Content>
+            </GovUkAccordionSection>
+
+            <GovUkAccordionSection Heading="Section 2">
+                <Content>
+                    <p class="govuk-body">This section is initially collapsed.</p>
+                </Content>
+            </GovUkAccordionSection>
+        </GovUkAccordion>
+
+    </main>
+</div>

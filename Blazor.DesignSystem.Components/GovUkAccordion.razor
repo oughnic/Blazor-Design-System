@@ -1,0 +1,25 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-accordion @CssClass" data-module="govuk-accordion" id="@Id">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>
+    /// The unique identifier for the accordion.
+    /// </summary>
+    [Parameter]
+    public string? Id { get; set; } = $"accordion-{Guid.NewGuid():N}";
+
+    /// <summary>
+    /// Additional CSS classes to apply to the accordion.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// The content of the accordion (should be GovUkAccordionSection components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
