@@ -1,4 +1,5 @@
 @namespace Blazor.DesignSystem.Components
+@implements IDisposable
 
 <div class="govuk-accordion__section @(IsExpanded ? "govuk-accordion__section--expanded" : "")">
     <div class="govuk-accordion__section-header">
@@ -10,7 +11,9 @@
                     aria-expanded="@(IsExpanded ? "true" : "false")"
                     @onclick="Toggle">
                 <span class="govuk-accordion__section-heading-text">
-                    @Heading
+                    <span class="govuk-accordion__section-heading-text-focus">
+                        @Heading
+                    </span>
                 </span>
                 @if (Summary != null)
                 {
@@ -18,21 +21,34 @@
                         @Summary
                     </span>
                 }
+                <span class="govuk-accordion__section-toggle" data-nosnippet>
+                    <span class="govuk-accordion__section-toggle-focus">
+                        <span class="govuk-accordion-nav__chevron @(IsExpanded ? "govuk-accordion-nav__chevron--down" : "")"></span>
+                        <span class="govuk-accordion__section-toggle-text">
+                            @(IsExpanded ? "Hide" : "Show")
+                        </span>
+                    </span>
+                </span>
             </button>
         </h2>
     </div>
     <div id="@ContentId" 
          class="govuk-accordion__section-content" 
          aria-labelledby="@HeadingId"
-         style="@(IsExpanded ? "" : "display: none;")">
+         @ref="_contentElement"
+         hidden="@(!IsExpanded)">
         @Content
     </div>
 </div>
 
 @code {
+    private ElementReference _contentElement;
     private string HeadingId => $"{ContentId}-heading";
     private string ContentId { get; set; } = $"accordion-section-{Guid.NewGuid():N}";
     private string SummaryId => $"{ContentId}-summary";
+
+    [CascadingParameter]
+    private GovUkAccordion? Accordion { get; set; }
 
     /// <summary>
     /// The heading text for the accordion section.
@@ -64,9 +80,32 @@
     [Parameter]
     public EventCallback<bool> IsExpandedChanged { get; set; }
 
+    protected override void OnInitialized()
+    {
+        Accordion?.RegisterSection(this);
+    }
+
     private async Task Toggle()
     {
-        IsExpanded = !IsExpanded;
-        await IsExpandedChanged.InvokeAsync(IsExpanded);
+        await SetExpandedState(!IsExpanded);
+    }
+
+    /// <summary>
+    /// Sets the expanded state of the section.
+    /// </summary>
+    internal async Task SetExpandedState(bool expanded)
+    {
+        if (IsExpanded != expanded)
+        {
+            IsExpanded = expanded;
+            await IsExpandedChanged.InvokeAsync(IsExpanded);
+            Accordion?.NotifySectionStateChanged();
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        Accordion?.UnregisterSection(this);
     }
 }
