@@ -1,0 +1,13 @@
+{
+  "name": "blazor.designsystem.web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "sass wwwroot/scss/styles.scss wwwroot/css/styles.css --no-source-map",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
