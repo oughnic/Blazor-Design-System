@@ -1,0 +1,282 @@
+@page "/components/validation"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Form validation - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Form validation</h1>
+<p class="govuk-body">This page demonstrates the validation patterns implemented in the GOV.UK Design System Blazor components.</p>
+
+<h2 class="govuk-heading-l">Validation patterns</h2>
+<p class="govuk-body">The GOV.UK Design System includes several accessibility features for form validation:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Error summary at the top of the form with links to each field</li>
+    <li>Error messages next to each field with the problem</li>
+    <li>Visually hidden "Error:" prefix for screen readers</li>
+    <li>aria-describedby linking error messages to form fields</li>
+    <li>aria-invalid attribute on fields with errors</li>
+    <li>Automatic focus management for the error summary</li>
+</ul>
+
+<h2 class="govuk-heading-l">Example form with validation</h2>
+
+<p class="govuk-body">Try submitting this form with errors to see how validation works.</p>
+
+@if (showErrors)
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@errorItems"
+        Description="@(hasMultipleErrors ? null : "Please fix the error below")" />
+}
+
+<form @onsubmit="HandleSubmit" @onsubmit:preventDefault>
+    <GovUkInput 
+        Id="full-name"
+        Name="full-name"
+        Label="Full name"
+        HasError="@nameError"
+        ErrorMessage="Enter your full name"
+        @bind-Value="fullName" />
+
+    <GovUkInput 
+        Id="email"
+        Name="email"
+        Label="Email address"
+        Type="email"
+        Hint="We'll only use this to send you a confirmation"
+        HasError="@emailError"
+        ErrorMessage="Enter a valid email address"
+        Autocomplete="email"
+        @bind-Value="email" />
+
+    <GovUkDateInput 
+        Id="date-of-birth"
+        Name="date-of-birth"
+        Legend="Date of birth"
+        LegendCssClass="govuk-fieldset__legend--m"
+        Hint="For example, 31 3 1980"
+        HasError="@dateError"
+        HasDayFieldError="@dayError"
+        HasMonthFieldError="@monthError"
+        HasYearFieldError="@yearError"
+        ErrorMessage="@dateErrorMessage"
+        @bind-Day="day"
+        @bind-Month="month"
+        @bind-Year="year" />
+
+    <GovUkRadios 
+        Name="contact-preference"
+        Legend="How would you prefer to be contacted?"
+        LegendCssClass="govuk-fieldset__legend--m"
+        Hint="Select one option"
+        HasError="@contactError"
+        ErrorMessage="Select how you would prefer to be contacted"
+        @bind-SelectedValue="contactPreference">
+        <GovUkRadioItem Value="email" Label="Email" />
+        <GovUkRadioItem Value="phone" Label="Phone" />
+        <GovUkRadioItem Value="text" Label="Text message" />
+    </GovUkRadios>
+
+    <GovUkCharacterCount 
+        Id="more-detail"
+        Name="more-detail"
+        Label="Can you provide more detail?"
+        LabelCssClass="govuk-label--m"
+        Hint="Do not include personal information like your National Insurance number"
+        MaxLength="200"
+        Threshold="75"
+        HasError="@detailError"
+        ErrorMessage="Your response must be 200 characters or less"
+        @bind-Value="moreDetail" />
+
+    <GovUkButton Type="submit">Submit</GovUkButton>
+</form>
+
+@if (formSubmitted)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Form submitted successfully</h2>
+        <div class="govuk-panel__body">
+            Thank you for your submission
+        </div>
+    </div>
+}
+
+<h2 class="govuk-heading-l govuk-!-margin-top-9">Individual field error highlighting</h2>
+<p class="govuk-body">The date input component supports highlighting individual fields with errors.</p>
+
+<h3 class="govuk-heading-m">Day only has an error</h3>
+<GovUkDateInput 
+    Id="date-day-error"
+    Name="date-day-error"
+    Legend="Enter a date"
+    Hint="For example, 31 3 1980"
+    HasError="true"
+    HasDayFieldError="true"
+    HasMonthFieldError="false"
+    HasYearFieldError="false"
+    ErrorMessage="Date must include a day"
+    Day="@null"
+    Month="3"
+    Year="1980" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Day and month have errors</h3>
+<GovUkDateInput 
+    Id="date-day-month-error"
+    Name="date-day-month-error"
+    Legend="Enter a date"
+    Hint="For example, 31 3 1980"
+    HasError="true"
+    HasDayFieldError="true"
+    HasMonthFieldError="true"
+    HasYearFieldError="false"
+    ErrorMessage="Date must include a day and month"
+    Day="@null"
+    Month="@null"
+    Year="1980" />
+
+<h2 class="govuk-heading-l govuk-!-margin-top-9">Word count validation</h2>
+<p class="govuk-body">Character count can also count words instead of characters.</p>
+
+<GovUkCharacterCount 
+    Id="word-count"
+    Name="word-count"
+    Label="Describe your proposal"
+    LabelCssClass="govuk-label--m"
+    Hint="Write a brief summary in no more than 100 words"
+    MaxWords="100"
+    Rows="8"
+    @bind-Value="wordCountValue" />
+
+@code {
+    private string? fullName;
+    private string? email;
+    private string? day;
+    private string? month;
+    private string? year;
+    private string? contactPreference;
+    private string? moreDetail;
+    private string? wordCountValue;
+
+    private bool showErrors = false;
+    private bool formSubmitted = false;
+
+    private bool nameError = false;
+    private bool emailError = false;
+    private bool dateError = false;
+    private bool dayError = false;
+    private bool monthError = false;
+    private bool yearError = false;
+    private string? dateErrorMessage;
+    private bool contactError = false;
+    private bool detailError = false;
+
+    private List<GovUkErrorSummary.ErrorItem> errorItems = new();
+    private bool hasMultipleErrors => errorItems.Count > 1;
+
+    private void HandleSubmit()
+    {
+        formSubmitted = false;
+        showErrors = false;
+        errorItems.Clear();
+
+        // Reset error states
+        nameError = false;
+        emailError = false;
+        dateError = false;
+        dayError = false;
+        monthError = false;
+        yearError = false;
+        dateErrorMessage = null;
+        contactError = false;
+        detailError = false;
+
+        // Validate full name
+        if (string.IsNullOrWhiteSpace(fullName))
+        {
+            nameError = true;
+            errorItems.Add(new GovUkErrorSummary.ErrorItem 
+            { 
+                Message = "Enter your full name", 
+                FieldId = "full-name" 
+            });
+        }
+
+        // Validate email
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+        {
+            emailError = true;
+            errorItems.Add(new GovUkErrorSummary.ErrorItem 
+            { 
+                Message = "Enter a valid email address", 
+                FieldId = "email" 
+            });
+        }
+
+        // Validate date
+        if (string.IsNullOrWhiteSpace(day) && string.IsNullOrWhiteSpace(month) && string.IsNullOrWhiteSpace(year))
+        {
+            dateError = true;
+            dayError = true;
+            monthError = true;
+            yearError = true;
+            dateErrorMessage = "Enter your date of birth";
+            errorItems.Add(new GovUkErrorSummary.ErrorItem 
+            { 
+                Message = "Enter your date of birth", 
+                FieldId = "date-of-birth-day" 
+            });
+        }
+        else
+        {
+            var missingParts = new List<string>();
+            if (string.IsNullOrWhiteSpace(day)) { dayError = true; missingParts.Add("day"); }
+            if (string.IsNullOrWhiteSpace(month)) { monthError = true; missingParts.Add("month"); }
+            if (string.IsNullOrWhiteSpace(year)) { yearError = true; missingParts.Add("year"); }
+
+            if (missingParts.Any())
+            {
+                dateError = true;
+                dateErrorMessage = $"Date of birth must include a {string.Join(" and ", missingParts)}";
+                var firstErrorField = dayError ? "day" : (monthError ? "month" : "year");
+                errorItems.Add(new GovUkErrorSummary.ErrorItem 
+                { 
+                    Message = dateErrorMessage, 
+                    FieldId = $"date-of-birth-{firstErrorField}" 
+                });
+            }
+        }
+
+        // Validate contact preference
+        if (string.IsNullOrWhiteSpace(contactPreference))
+        {
+            contactError = true;
+            errorItems.Add(new GovUkErrorSummary.ErrorItem 
+            { 
+                Message = "Select how you would prefer to be contacted", 
+                FieldId = "contact-preference" 
+            });
+        }
+
+        // Validate character count
+        if (!string.IsNullOrWhiteSpace(moreDetail) && moreDetail.Length > 200)
+        {
+            detailError = true;
+            errorItems.Add(new GovUkErrorSummary.ErrorItem 
+            { 
+                Message = "Your response must be 200 characters or less", 
+                FieldId = "more-detail" 
+            });
+        }
+
+        if (errorItems.Any())
+        {
+            showErrors = true;
+        }
+        else
+        {
+            formSubmitted = true;
+        }
+    }
+}

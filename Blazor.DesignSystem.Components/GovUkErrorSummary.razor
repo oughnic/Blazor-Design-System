@@ -1,31 +1,50 @@
 @namespace Blazor.DesignSystem.Components
+@inject IJSRuntime JSRuntime
 
-<div class="govuk-error-summary @CssClass" data-module="govuk-error-summary" @attributes="AdditionalAttributes">
+<div @ref="_errorSummaryElement"
+     class="govuk-error-summary @CssClass" 
+     data-module="govuk-error-summary"
+     data-disable-auto-focus="@(DisableAutoFocus ? "true" : null)"
+     tabindex="-1"
+     @attributes="AdditionalAttributes">
     <div role="alert">
         <h2 class="govuk-error-summary__title">
             @Title
         </h2>
         <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-                @foreach (var error in Errors)
-                {
-                    <li>
-                        @if (!string.IsNullOrWhiteSpace(error.FieldId))
-                        {
-                            <a href="#@error.FieldId">@error.Message</a>
-                        }
-                        else
-                        {
-                            @error.Message
-                        }
-                    </li>
-                }
-            </ul>
+            @if (!string.IsNullOrWhiteSpace(Description))
+            {
+                <p>@Description</p>
+            }
+            @if (DescriptionContent != null)
+            {
+                <p>@DescriptionContent</p>
+            }
+            @if (Errors.Any())
+            {
+                <ul class="govuk-list govuk-error-summary__list">
+                    @foreach (var error in Errors)
+                    {
+                        <li>
+                            @if (!string.IsNullOrWhiteSpace(error.FieldId))
+                            {
+                                <a href="#@error.FieldId" @onclick="@(() => HandleErrorClick(error.FieldId))" @onclick:preventDefault>@error.Message</a>
+                            }
+                            else
+                            {
+                                @error.Message
+                            }
+                        </li>
+                    }
+                </ul>
+            }
         </div>
     </div>
 </div>
 
 @code {
+    private ElementReference _errorSummaryElement;
+
     /// <summary>
     /// The error summary title. Defaults to "There is a problem".
     /// </summary>
@@ -33,10 +52,28 @@
     public string Title { get; set; } = "There is a problem";
 
     /// <summary>
+    /// Optional description text to display before the error list.
+    /// </summary>
+    [Parameter]
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Optional description content (as RenderFragment) to display before the error list.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? DescriptionContent { get; set; }
+
+    /// <summary>
     /// The list of errors to display.
     /// </summary>
     [Parameter]
     public IEnumerable<ErrorItem> Errors { get; set; } = Enumerable.Empty<ErrorItem>();
+
+    /// <summary>
+    /// If set to true, the error summary will not be focussed when the page loads.
+    /// </summary>
+    [Parameter]
+    public bool DisableAutoFocus { get; set; }
 
     /// <summary>
     /// Additional CSS classes to apply.
@@ -49,6 +86,57 @@
     /// </summary>
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !DisableAutoFocus && Errors.Any())
+        {
+            await FocusErrorSummaryAsync();
+        }
+    }
+
+    /// <summary>
+    /// Focuses the error summary element. This can be called programmatically when needed.
+    /// </summary>
+    public async Task FocusErrorSummaryAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[data-module=\"govuk-error-summary\"]')?.focus()");
+    }
+
+    private async Task HandleErrorClick(string? fieldId)
+    {
+        if (string.IsNullOrWhiteSpace(fieldId))
+            return;
+
+        // Scroll the target element into view and focus it
+        await JSRuntime.InvokeVoidAsync("eval", $@"
+            (function() {{
+                var input = document.getElementById('{fieldId}');
+                if (!input) return;
+                
+                // Find associated legend or label
+                var fieldset = input.closest('fieldset');
+                var legendOrLabel = null;
+                
+                if (fieldset) {{
+                    var legends = fieldset.getElementsByTagName('legend');
+                    if (legends.length) {{
+                        legendOrLabel = legends[0];
+                    }}
+                }}
+                
+                if (!legendOrLabel) {{
+                    legendOrLabel = document.querySelector('label[for=""' + '{fieldId}' + '""]') || input.closest('label');
+                }}
+                
+                if (legendOrLabel) {{
+                    legendOrLabel.scrollIntoView();
+                }}
+                
+                input.focus({{ preventScroll: true }});
+            }})();
+        ");
+    }
 
     /// <summary>
     /// Represents an error item in the error summary.

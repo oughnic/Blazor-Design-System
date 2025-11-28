@@ -16,7 +16,7 @@
     @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
     {
         <p id="@(Id)-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
         </p>
     }
     <input class="govuk-input @GetWidthClass() @(HasError ? "govuk-input--error" : "") @InputCssClass" 
@@ -26,6 +26,7 @@
            value="@Value"
            disabled="@Disabled"
            aria-describedby="@GetAriaDescribedBy()"
+           aria-invalid="@(HasError ? "true" : null)"
            autocomplete="@Autocomplete"
            inputmode="@InputMode"
            pattern="@Pattern"
@@ -100,6 +101,12 @@
     /// </summary>
     [Parameter]
     public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// The width of the input (e.g., "20", "10", "5", "4", "3", "2", "full", "three-quarters", "two-thirds", "one-half", "one-third", "one-quarter").

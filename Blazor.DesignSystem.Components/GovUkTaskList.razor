@@ -1,0 +1,193 @@
+@namespace Blazor.DesignSystem.Components
+
+<ul class="govuk-task-list @CssClass" @attributes="AdditionalAttributes">
+    @foreach (var (item, index) in Items.Select((item, i) => (item, i + 1)))
+    {
+        var hintId = $"{IdPrefix}-{index}-hint";
+        var statusId = $"{IdPrefix}-{index}-status";
+        
+        <li class="govuk-task-list__item @(item.Href != null ? "govuk-task-list__item--with-link" : "") @item.CssClass">
+            <div class="govuk-task-list__name-and-hint">
+                @if (!string.IsNullOrWhiteSpace(item.Href))
+                {
+                    <a class="govuk-link govuk-task-list__link @item.TitleCssClass" 
+                       href="@item.Href" 
+                       aria-describedby="@GetAriaDescribedBy(item, hintId, statusId)">
+                        @if (item.TitleContent != null)
+                        {
+                            @item.TitleContent
+                        }
+                        else
+                        {
+                            @item.Title
+                        }
+                    </a>
+                }
+                else
+                {
+                    <div class="@item.TitleCssClass">
+                        @if (item.TitleContent != null)
+                        {
+                            @item.TitleContent
+                        }
+                        else
+                        {
+                            @item.Title
+                        }
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(item.Hint) || item.HintContent != null)
+                {
+                    <div id="@hintId" class="govuk-task-list__hint">
+                        @if (item.HintContent != null)
+                        {
+                            @item.HintContent
+                        }
+                        else
+                        {
+                            @item.Hint
+                        }
+                    </div>
+                }
+            </div>
+            <div class="govuk-task-list__status @item.StatusCssClass" id="@statusId">
+                @if (item.StatusTag != null)
+                {
+                    <GovUkTag Text="@item.StatusTag.Text" 
+                              Color="@item.StatusTag.Color" 
+                              CssClass="@item.StatusTag.CssClass" />
+                }
+                else if (item.StatusContent != null)
+                {
+                    @item.StatusContent
+                }
+                else
+                {
+                    @item.StatusText
+                }
+            </div>
+        </li>
+    }
+</ul>
+
+@code {
+    /// <summary>
+    /// ID prefix for the task list items. Defaults to "task-list".
+    /// </summary>
+    [Parameter]
+    public string IdPrefix { get; set; } = "task-list";
+
+    /// <summary>
+    /// The list of task items to display.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<TaskListItem> Items { get; set; } = Enumerable.Empty<TaskListItem>();
+
+    /// <summary>
+    /// Additional CSS classes to apply to the task list.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply to the task list.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GetAriaDescribedBy(TaskListItem item, string hintId, string statusId)
+    {
+        var parts = new List<string>();
+        
+        if (!string.IsNullOrWhiteSpace(item.Hint) || item.HintContent != null)
+        {
+            parts.Add(hintId);
+        }
+        
+        parts.Add(statusId);
+        
+        return string.Join(" ", parts);
+    }
+
+    /// <summary>
+    /// Represents a task list item.
+    /// </summary>
+    public class TaskListItem
+    {
+        /// <summary>
+        /// The title text of the task.
+        /// </summary>
+        public string? Title { get; set; }
+
+        /// <summary>
+        /// Custom title content (takes precedence over Title).
+        /// </summary>
+        public RenderFragment? TitleContent { get; set; }
+
+        /// <summary>
+        /// Additional CSS classes for the title.
+        /// </summary>
+        public string? TitleCssClass { get; set; }
+
+        /// <summary>
+        /// The URL to link to. If provided, the title becomes a link.
+        /// </summary>
+        public string? Href { get; set; }
+
+        /// <summary>
+        /// Hint text to display below the title.
+        /// </summary>
+        public string? Hint { get; set; }
+
+        /// <summary>
+        /// Custom hint content (takes precedence over Hint).
+        /// </summary>
+        public RenderFragment? HintContent { get; set; }
+
+        /// <summary>
+        /// The status text to display.
+        /// </summary>
+        public string? StatusText { get; set; }
+
+        /// <summary>
+        /// Custom status content (takes precedence over StatusText).
+        /// </summary>
+        public RenderFragment? StatusContent { get; set; }
+
+        /// <summary>
+        /// Tag configuration for the status (takes precedence over StatusText/StatusContent).
+        /// </summary>
+        public TaskListStatusTag? StatusTag { get; set; }
+
+        /// <summary>
+        /// Additional CSS classes for the status.
+        /// </summary>
+        public string? StatusCssClass { get; set; }
+
+        /// <summary>
+        /// Additional CSS classes for the list item.
+        /// </summary>
+        public string? CssClass { get; set; }
+    }
+
+    /// <summary>
+    /// Configuration for a task list status tag.
+    /// </summary>
+    public class TaskListStatusTag
+    {
+        /// <summary>
+        /// The tag text.
+        /// </summary>
+        public string? Text { get; set; }
+
+        /// <summary>
+        /// The tag color (e.g., "grey", "green", "turquoise", "blue", "purple", "pink", "red", "orange", "yellow").
+        /// </summary>
+        public string? Color { get; set; }
+
+        /// <summary>
+        /// Additional CSS classes for the tag.
+        /// </summary>
+        public string? CssClass { get; set; }
+    }
+}

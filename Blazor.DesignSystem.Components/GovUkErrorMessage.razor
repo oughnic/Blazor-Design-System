@@ -1,7 +1,11 @@
 @namespace Blazor.DesignSystem.Components
 
 <p id="@Id" class="govuk-error-message @CssClass" @attributes="AdditionalAttributes">
-    <span class="govuk-visually-hidden">Error:</span> @ChildContent
+    @if (!string.IsNullOrWhiteSpace(VisuallyHiddenText))
+    {
+        <span class="govuk-visually-hidden">@VisuallyHiddenText:</span>
+    }
+    @ChildContent
 </p>
 
 @code {
@@ -10,6 +14,13 @@
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// Set to empty string to disable the visually hidden text.
+    /// </summary>
+    [Parameter]
+    public string VisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// The error message content.

@@ -1,7 +1,11 @@
 @namespace Blazor.DesignSystem.Components
 
-<div class="govuk-character-count @CssClass" data-module="govuk-character-count" data-maxlength="@MaxLength">
-    <div class="govuk-form-group @(HasError ? "govuk-form-group--error" : "")">
+<div class="govuk-character-count @CssClass" 
+     data-module="govuk-character-count" 
+     data-maxwords="@(MaxWords.HasValue ? MaxWords.ToString() : null)"
+     data-maxlength="@(MaxWords.HasValue ? null : MaxLength.ToString())"
+     data-threshold="@(Threshold > 0 ? Threshold.ToString() : null)">
+    <div class="govuk-form-group @(HasError || IsOverLimit ? "govuk-form-group--error" : "")">
         @if (!string.IsNullOrWhiteSpace(Label))
         {
             <label class="govuk-label @LabelCssClass" for="@Id">
@@ -17,19 +21,29 @@
         @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
         {
             <p id="@(Id)-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+                <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
             </p>
         }
-        <textarea class="govuk-textarea govuk-js-character-count @(HasError ? "govuk-textarea--error" : "") @TextAreaCssClass" 
+        <textarea class="govuk-textarea govuk-js-character-count @(HasError || IsOverLimit ? "govuk-textarea--error" : "") @TextAreaCssClass" 
                   id="@Id" 
                   name="@Name" 
                   rows="@Rows"
                   aria-describedby="@GetAriaDescribedBy()"
-                  value="@Value"
-                  @oninput="HandleInput">
-        </textarea>
+                  aria-invalid="@((HasError || IsOverLimit) ? "true" : null)"
+                  @oninput="HandleInput"
+                  @attributes="AdditionalAttributes">@Value</textarea>
     </div>
-    <div id="@(Id)-info" class="govuk-hint govuk-character-count__message">
+    @* Screen reader announcement element with aria-live *@
+    <div id="@(Id)-sr-status" 
+         class="govuk-character-count__sr-status govuk-visually-hidden" 
+         aria-live="polite"
+         aria-hidden="@(!IsOverThreshold() ? "true" : null)">
+        @GetCountMessage()
+    </div>
+    @* Visible count message *@
+    <div id="@(Id)-info" 
+         class="@GetCountMessageClass()"
+         aria-hidden="true">
         @GetCountMessage()
     </div>
 </div>
@@ -66,10 +80,16 @@
     public string? Hint { get; set; }
 
     /// <summary>
-    /// The maximum number of characters allowed.
+    /// The maximum number of characters allowed. Ignored if MaxWords is provided.
     /// </summary>
     [Parameter]
     public int MaxLength { get; set; } = 200;
+
+    /// <summary>
+    /// The maximum number of words allowed. If provided, character count is ignored.
+    /// </summary>
+    [Parameter]
+    public int? MaxWords { get; set; }
 
     /// <summary>
     /// The number of rows for the textarea.
@@ -102,6 +122,12 @@
     public string? ErrorMessage { get; set; }
 
     /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
+
+    /// <summary>
     /// Additional CSS classes to apply to the component.
     /// </summary>
     [Parameter]
@@ -114,14 +140,111 @@
     public string? TextAreaCssClass { get; set; }
 
     /// <summary>
-    /// The threshold percentage at which to show the count. Default is 100 (always show).
+    /// The threshold percentage at which to show the count. Default is 0 (always show).
+    /// Set to a value like 75 to only show the count when 75% of the limit is reached.
     /// </summary>
     [Parameter]
-    public int Threshold { get; set; } = 100;
+    public int Threshold { get; set; } = 0;
 
-    private int CharacterCount => Value?.Length ?? 0;
-    private int RemainingCharacters => MaxLength - CharacterCount;
-    private bool IsOverLimit => CharacterCount > MaxLength;
+    /// <summary>
+    /// Additional HTML attributes to apply to the textarea.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    // Character/word count messages - can be customized
+    /// <summary>
+    /// Message format for characters under limit. Use {count} placeholder.
+    /// </summary>
+    [Parameter]
+    public string CharactersUnderLimitText { get; set; } = "You have {count} characters remaining";
+
+    /// <summary>
+    /// Message format for characters under limit (singular).
+    /// </summary>
+    [Parameter]
+    public string CharactersUnderLimitTextOne { get; set; } = "You have 1 character remaining";
+
+    /// <summary>
+    /// Message when at character limit.
+    /// </summary>
+    [Parameter]
+    public string CharactersAtLimitText { get; set; } = "You have 0 characters remaining";
+
+    /// <summary>
+    /// Message format for characters over limit. Use {count} placeholder.
+    /// </summary>
+    [Parameter]
+    public string CharactersOverLimitText { get; set; } = "You have {count} characters too many";
+
+    /// <summary>
+    /// Message format for characters over limit (singular).
+    /// </summary>
+    [Parameter]
+    public string CharactersOverLimitTextOne { get; set; } = "You have 1 character too many";
+
+    /// <summary>
+    /// Message format for words under limit. Use {count} placeholder.
+    /// </summary>
+    [Parameter]
+    public string WordsUnderLimitText { get; set; } = "You have {count} words remaining";
+
+    /// <summary>
+    /// Message format for words under limit (singular).
+    /// </summary>
+    [Parameter]
+    public string WordsUnderLimitTextOne { get; set; } = "You have 1 word remaining";
+
+    /// <summary>
+    /// Message when at word limit.
+    /// </summary>
+    [Parameter]
+    public string WordsAtLimitText { get; set; } = "You have 0 words remaining";
+
+    /// <summary>
+    /// Message format for words over limit. Use {count} placeholder.
+    /// </summary>
+    [Parameter]
+    public string WordsOverLimitText { get; set; } = "You have {count} words too many";
+
+    /// <summary>
+    /// Message format for words over limit (singular).
+    /// </summary>
+    [Parameter]
+    public string WordsOverLimitTextOne { get; set; } = "You have 1 word too many";
+
+    private int GetCurrentCount()
+    {
+        if (string.IsNullOrEmpty(Value))
+            return 0;
+
+        if (MaxWords.HasValue)
+        {
+            // Count words by matching consecutive non-whitespace characters
+            var words = System.Text.RegularExpressions.Regex.Matches(Value, @"\S+");
+            return words.Count;
+        }
+        
+        return Value.Length;
+    }
+
+    private int GetMaxLimit() => MaxWords ?? MaxLength;
+
+    private int GetRemainingCount() => GetMaxLimit() - GetCurrentCount();
+
+    private bool IsOverLimit => GetCurrentCount() > GetMaxLimit();
+
+    private bool IsOverThreshold()
+    {
+        if (Threshold == 0)
+            return true;
+
+        var currentLength = GetCurrentCount();
+        var maxLength = GetMaxLimit();
+        var thresholdValue = (maxLength * Threshold) / 100.0;
+
+        return currentLength >= thresholdValue;
+    }
 
     private async Task HandleInput(ChangeEventArgs e)
     {
@@ -131,21 +254,66 @@
 
     private string GetCountMessage()
     {
-        var remaining = RemainingCharacters;
+        var remaining = GetRemainingCount();
         var abs = Math.Abs(remaining);
+        var isWordCount = MaxWords.HasValue;
         
-        if (remaining >= 0)
+        if (remaining == 0)
         {
-            return remaining == 1 
-                ? "You have 1 character remaining" 
-                : $"You have {remaining} characters remaining";
+            return isWordCount ? WordsAtLimitText : CharactersAtLimitText;
+        }
+        else if (remaining > 0)
+        {
+            if (isWordCount)
+            {
+                return remaining == 1 
+                    ? WordsUnderLimitTextOne 
+                    : WordsUnderLimitText.Replace("{count}", remaining.ToString());
+            }
+            else
+            {
+                return remaining == 1 
+                    ? CharactersUnderLimitTextOne 
+                    : CharactersUnderLimitText.Replace("{count}", remaining.ToString());
+            }
         }
         else
         {
-            return abs == 1 
-                ? "You have 1 character too many" 
-                : $"You have {abs} characters too many";
+            if (isWordCount)
+            {
+                return abs == 1 
+                    ? WordsOverLimitTextOne 
+                    : WordsOverLimitText.Replace("{count}", abs.ToString());
+            }
+            else
+            {
+                return abs == 1 
+                    ? CharactersOverLimitTextOne 
+                    : CharactersOverLimitText.Replace("{count}", abs.ToString());
+            }
         }
+    }
+
+    private string GetCountMessageClass()
+    {
+        var baseClass = "govuk-character-count__status";
+        var classes = new List<string> { baseClass };
+        
+        if (!IsOverThreshold())
+        {
+            classes.Add("govuk-character-count__message--disabled");
+        }
+        
+        if (IsOverLimit)
+        {
+            classes.Add("govuk-error-message");
+        }
+        else
+        {
+            classes.Add("govuk-hint");
+        }
+        
+        return string.Join(" ", classes);
     }
 
     private string GetAriaDescribedBy()
