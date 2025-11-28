@@ -347,7 +347,8 @@ namespace Blazor.DesignSystem.Components.Validation
                 return ValidationResult.Failure("Password must include a number");
             }
 
-            if (options.RequireSymbol && !Regex.IsMatch(password, @"[!@#$%^&*(),.?""':{}|<>]"))
+            // Comprehensive symbol set including common special characters
+            if (options.RequireSymbol && !Regex.IsMatch(password, @"[!@#$%^&*(),.?""':{}|<>\-+=_\[\]\\;`~]"))
             {
                 return ValidationResult.Failure("Password must include a symbol");
             }
@@ -372,7 +373,12 @@ namespace Blazor.DesignSystem.Components.Validation
 
         #region National Insurance Number Validation
 
-        // UK National Insurance number pattern
+        // UK National Insurance number pattern:
+        // - First character: A-Z excluding D, F, I, Q, U, V (prefix cannot start with these)
+        // - Second character: A-Z excluding D, F, I, O, Q, U, V (prefix cannot contain these in second position)
+        // - Followed by 6 digits
+        // - Optional suffix letter A-D
+        // - Cannot start with BG, GB, NK, KN, TN, NT, or ZZ (administrative codes)
         private static readonly Regex NinoRegex = new(
             @"^(?!BG|GB|NK|KN|TN|NT|ZZ)[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-D]?$",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -419,8 +425,12 @@ namespace Blazor.DesignSystem.Components.Validation
             // Remove spaces, hyphens, and parentheses
             var cleaned = Regex.Replace(phoneNumber, @"[\s\-\(\)]", "");
 
-            // Check for valid UK format
-            if (!Regex.IsMatch(cleaned, @"^(?:0|\+44|0044)\d{9,10}$"))
+            // UK phone number formats:
+            // - Landlines: 01234 567890 (10 digits after 0) or 0123 456 7890 (11 digits total including area code)
+            // - Mobile: 07123 456789 (11 digits total)
+            // - International: +44 1234 567890 or 0044 1234 567890
+            // Pattern allows 10-11 digits after prefix to accommodate both formats
+            if (!Regex.IsMatch(cleaned, @"^(?:0\d{10}|\+44\d{10}|0044\d{10})$"))
             {
                 return ValidationResult.Failure("Enter a telephone number in the correct format, like 01234 567890 or +44 1234 567890");
             }
