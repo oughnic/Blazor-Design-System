@@ -1,0 +1,55 @@
+@namespace Blazor.DesignSystem.Components
+
+<table class="govuk-table @CssClass" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(Caption))
+    {
+        <caption class="govuk-table__caption @CaptionCssClass">@Caption</caption>
+    }
+    @if (Head != null)
+    {
+        <thead class="govuk-table__head">
+            @Head
+        </thead>
+    }
+    <tbody class="govuk-table__body">
+        @ChildContent
+    </tbody>
+</table>
+
+@code {
+    /// <summary>
+    /// The table caption.
+    /// </summary>
+    [Parameter]
+    public string? Caption { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the caption.
+    /// </summary>
+    [Parameter]
+    public string? CaptionCssClass { get; set; }
+
+    /// <summary>
+    /// The table head content (should contain tr with th elements).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Head { get; set; }
+
+    /// <summary>
+    /// The table body content (should contain tr with td elements).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

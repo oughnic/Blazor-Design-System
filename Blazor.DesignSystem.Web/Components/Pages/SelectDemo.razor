@@ -1,0 +1,44 @@
+@page "/components/select"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Select - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Select</h1>
+<p class="govuk-body">The select component should only be used as a last resort in public-facing services because research shows that some users find selects very difficult to use.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default select</h3>
+<GovUkSelect Id="sort" Name="sort" Label="Sort by" @bind-Value="sortValue">
+    <option value="">Select an option</option>
+    <option value="published">Recently published</option>
+    <option value="updated">Recently updated</option>
+    <option value="views">Most views</option>
+    <option value="comments">Most comments</option>
+</GovUkSelect>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @sortValue</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Select with hint</h3>
+<GovUkSelect Id="location" Name="location" Label="Choose location" Hint="Select where the event will take place" @bind-Value="locationValue">
+    <option value="">Select a location</option>
+    <option value="london">London</option>
+    <option value="manchester">Manchester</option>
+    <option value="birmingham">Birmingham</option>
+    <option value="leeds">Leeds</option>
+</GovUkSelect>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Select with error</h3>
+<GovUkSelect Id="with-error" Name="with-error" Label="Choose a country" HasError="true" ErrorMessage="Select a country" @bind-Value="countryValue">
+    <option value="">Select a country</option>
+    <option value="england">England</option>
+    <option value="scotland">Scotland</option>
+    <option value="wales">Wales</option>
+    <option value="northern-ireland">Northern Ireland</option>
+</GovUkSelect>
+
+@code {
+    private string? sortValue;
+    private string? locationValue;
+    private string? countryValue;
+}

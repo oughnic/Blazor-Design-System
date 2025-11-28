@@ -1,0 +1,30 @@
+@page "/components/details"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Details - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Details</h1>
+<p class="govuk-body">Make a page easier to scan by letting users reveal more detailed information only if they need it.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the details component to make a page easier to scan when it contains information that only some users will need.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default details</h3>
+<GovUkDetails Summary="Help with nationality">
+    <p class="govuk-body">We need to know your nationality so we can work out which elections you're entitled to vote in. If you cannot provide your nationality, you'll have to send copies of identity documents through the post.</p>
+</GovUkDetails>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Details with longer content</h3>
+<GovUkDetails Summary="How to apply for a passport">
+    <p class="govuk-body">To apply for a passport you'll need:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>a completed application form</li>
+        <li>two passport photos</li>
+        <li>proof of identity</li>
+        <li>the fee</li>
+    </ul>
+    <p class="govuk-body">Processing usually takes 3 weeks.</p>
+</GovUkDetails>

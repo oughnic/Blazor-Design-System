@@ -1,0 +1,57 @@
+@page "/components/summary-list"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Summary list - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Summary list</h1>
+<p class="govuk-body">Use the summary list to summarise information, for example, a user's responses at the end of a form.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default summary list</h3>
+<GovUkSummaryList>
+    <GovUkSummaryListRow>
+        <Key>Name</Key>
+        <Value>Sarah Philips</Value>
+        <Actions>
+            <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> name</span></a>
+        </Actions>
+    </GovUkSummaryListRow>
+    <GovUkSummaryListRow>
+        <Key>Date of birth</Key>
+        <Value>5 January 1978</Value>
+        <Actions>
+            <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> date of birth</span></a>
+        </Actions>
+    </GovUkSummaryListRow>
+    <GovUkSummaryListRow>
+        <Key>Address</Key>
+        <Value>72 Guild Street<br>London<br>SE23 6FH</Value>
+        <Actions>
+            <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> address</span></a>
+        </Actions>
+    </GovUkSummaryListRow>
+    <GovUkSummaryListRow>
+        <Key>Contact details</Key>
+        <Value>07700 900457<br>sarah.phillips@example.com</Value>
+        <Actions>
+            <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> contact details</span></a>
+        </Actions>
+    </GovUkSummaryListRow>
+</GovUkSummaryList>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Summary list without borders</h3>
+<GovUkSummaryList NoBorder="true">
+    <GovUkSummaryListRow NoActions="true">
+        <Key>Name</Key>
+        <Value>Sarah Philips</Value>
+    </GovUkSummaryListRow>
+    <GovUkSummaryListRow NoActions="true">
+        <Key>Date of birth</Key>
+        <Value>5 January 1978</Value>
+    </GovUkSummaryListRow>
+    <GovUkSummaryListRow NoActions="true">
+        <Key>Address</Key>
+        <Value>72 Guild Street<br>London<br>SE23 6FH</Value>
+    </GovUkSummaryListRow>
+</GovUkSummaryList>

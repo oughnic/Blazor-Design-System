@@ -1,0 +1,26 @@
+@page "/components/date-input"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Date input - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Date input</h1>
+<p class="govuk-body">Use the date input component to help users enter a memorable date or one they can easily look up.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default date input</h3>
+<GovUkDateInput Id="passport-issued" Name="passport-issued" Legend="When was your passport issued?" Hint="For example, 27 3 2007" @bind-Day="day1" @bind-Month="month1" @bind-Year="year1" />
+<p class="govuk-body govuk-!-margin-top-2">Date: @day1/@month1/@year1</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Date input with error</h3>
+<GovUkDateInput Id="dob-error" Name="dob-error" Legend="What is your date of birth?" LegendCssClass="govuk-fieldset__legend--l" IsPageHeading="true" Hint="For example, 31 3 1980" HasError="true" ErrorMessage="The date your passport was issued must be in the past" @bind-Day="day2" @bind-Month="month2" @bind-Year="year2" />
+
+@code {
+    private string? day1;
+    private string? month1;
+    private string? year1;
+    private string? day2 = "6";
+    private string? month2 = "3";
+    private string? year2 = "2076";
+}

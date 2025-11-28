@@ -1,0 +1,85 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-tabs @CssClass" data-module="govuk-tabs" @attributes="AdditionalAttributes">
+    <h2 class="govuk-tabs__title">
+        @Title
+    </h2>
+    <ul class="govuk-tabs__list" role="tablist">
+        <CascadingValue Value="this">
+            @TabList
+        </CascadingValue>
+    </ul>
+    <CascadingValue Value="this">
+        @TabPanels
+    </CascadingValue>
+</div>
+
+@code {
+    private List<GovUkTab> _tabs = new();
+    private string? _activeTabId;
+
+    /// <summary>
+    /// The tabs title (for screen readers). Defaults to "Contents".
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "Contents";
+
+    /// <summary>
+    /// The tab list items (should contain GovUkTab components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TabList { get; set; }
+
+    /// <summary>
+    /// The tab panels (should contain GovUkTabPanel components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TabPanels { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    /// <summary>
+    /// Gets the active tab ID.
+    /// </summary>
+    public string? ActiveTabId => _activeTabId ?? _tabs.FirstOrDefault()?.Id;
+
+    internal void RegisterTab(GovUkTab tab)
+    {
+        if (!_tabs.Contains(tab))
+        {
+            _tabs.Add(tab);
+            if (_activeTabId == null && _tabs.Count == 1)
+            {
+                _activeTabId = tab.Id;
+            }
+            StateHasChanged();
+        }
+    }
+
+    internal void UnregisterTab(GovUkTab tab)
+    {
+        _tabs.Remove(tab);
+        StateHasChanged();
+    }
+
+    internal void SelectTab(string tabId)
+    {
+        _activeTabId = tabId;
+        StateHasChanged();
+    }
+
+    internal bool IsTabActive(string tabId)
+    {
+        return ActiveTabId == tabId;
+    }
+}

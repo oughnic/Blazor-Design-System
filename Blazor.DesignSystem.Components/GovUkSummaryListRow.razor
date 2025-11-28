@@ -1,0 +1,48 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-summary-list__row @(NoActions ? "govuk-summary-list__row--no-actions" : "") @CssClass">
+    <dt class="govuk-summary-list__key">
+        @Key
+    </dt>
+    <dd class="govuk-summary-list__value">
+        @Value
+    </dd>
+    @if (Actions != null && !NoActions)
+    {
+        <dd class="govuk-summary-list__actions">
+            @Actions
+        </dd>
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// The key/label for the row.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Key { get; set; }
+
+    /// <summary>
+    /// The value for the row.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Value { get; set; }
+
+    /// <summary>
+    /// The action links for the row.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    /// <summary>
+    /// Whether to hide the actions column.
+    /// </summary>
+    [Parameter]
+    public bool NoActions { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+}

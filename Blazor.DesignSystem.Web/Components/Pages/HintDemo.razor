@@ -1,0 +1,20 @@
+@page "/components/hint"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Hint - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Hint</h1>
+<p class="govuk-body">Use hint text to help users understand a question.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use hint text when you need to explain a question in more detail, or to help users provide information in the correct format.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default hint</h3>
+<GovUkHint>It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'.</GovUkHint>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Hint with ID (for aria-describedby)</h3>
+<label class="govuk-label" for="ni-number">National Insurance number</label>
+<GovUkHint Id="ni-hint">It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'.</GovUkHint>
+<input class="govuk-input" id="ni-number" name="ni-number" type="text" aria-describedby="ni-hint">

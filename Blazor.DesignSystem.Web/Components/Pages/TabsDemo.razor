@@ -1,0 +1,58 @@
+@page "/components/tabs"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Tabs - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Tabs</h1>
+<p class="govuk-body">The tabs component lets users navigate between related sections of content, displaying one section at a time.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default tabs</h3>
+<GovUkTabs>
+    <TabList>
+        <GovUkTab Id="past-day" Label="Past day" />
+        <GovUkTab Id="past-week" Label="Past week" />
+        <GovUkTab Id="past-month" Label="Past month" />
+        <GovUkTab Id="past-year" Label="Past year" />
+    </TabList>
+    <TabPanels>
+        <GovUkTabPanel Id="past-day">
+            <h2 class="govuk-heading-l">Past day</h2>
+            <GovUkTable Caption="Downloads in the past day" CaptionCssClass="govuk-table__caption--m">
+                <Head>
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Case manager</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Cases opened</th>
+                        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Cases closed</th>
+                    </tr>
+                </Head>
+                <ChildContent>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">David Francis</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">3</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">0</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Paul Farmer</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">1</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">0</td>
+                    </tr>
+                </ChildContent>
+            </GovUkTable>
+        </GovUkTabPanel>
+        <GovUkTabPanel Id="past-week">
+            <h2 class="govuk-heading-l">Past week</h2>
+            <p class="govuk-body">This panel shows content for the past week.</p>
+        </GovUkTabPanel>
+        <GovUkTabPanel Id="past-month">
+            <h2 class="govuk-heading-l">Past month</h2>
+            <p class="govuk-body">This panel shows content for the past month.</p>
+        </GovUkTabPanel>
+        <GovUkTabPanel Id="past-year">
+            <h2 class="govuk-heading-l">Past year</h2>
+            <p class="govuk-body">This panel shows content for the past year.</p>
+        </GovUkTabPanel>
+    </TabPanels>
+</GovUkTabs>

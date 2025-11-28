@@ -1,0 +1,33 @@
+@page "/components/error-summary"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Error summary - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Error summary</h1>
+<p class="govuk-body">Use this component at the top of a page to summarise any errors a user has made.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Always show an error summary when there is a validation error, even if there's only one.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default error summary</h3>
+<GovUkErrorSummary Errors="@errors" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Error summary with custom title</h3>
+<GovUkErrorSummary Title="Fix the following errors" Errors="@customErrors" />
+
+@code {
+    private List<GovUkErrorSummary.ErrorItem> errors = new()
+    {
+        new GovUkErrorSummary.ErrorItem { Message = "Enter your full name", FieldId = "full-name" },
+        new GovUkErrorSummary.ErrorItem { Message = "The date your passport was issued must be in the past", FieldId = "passport-issued-day" },
+        new GovUkErrorSummary.ErrorItem { Message = "Enter a postcode, like AA1 1AA", FieldId = "postcode" }
+    };
+
+    private List<GovUkErrorSummary.ErrorItem> customErrors = new()
+    {
+        new GovUkErrorSummary.ErrorItem { Message = "Select if you are British, Irish or a citizen of another country", FieldId = "nationality" },
+        new GovUkErrorSummary.ErrorItem { Message = "Enter your date of birth", FieldId = "dob" }
+    };
+}

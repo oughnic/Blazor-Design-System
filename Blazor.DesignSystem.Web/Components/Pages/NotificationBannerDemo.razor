@@ -1,0 +1,32 @@
+@page "/components/notification-banner"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Notification banner - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Notification banner</h1>
+<p class="govuk-body">Use a notification banner to tell the user about something they need to know about, but that's not directly related to the page content.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default notification banner</h3>
+<GovUkNotificationBanner>
+    <p class="govuk-notification-banner__heading">
+        You have 7 days left to send your application.
+        <a class="govuk-notification-banner__link" href="#">View application</a>.
+    </p>
+</GovUkNotificationBanner>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Success notification banner</h3>
+<GovUkNotificationBanner Type="success" Title="Success">
+    <h3 class="govuk-notification-banner__heading">
+        Training outcome recorded and trainee notified
+    </h3>
+    <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there's a problem.</p>
+</GovUkNotificationBanner>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Notification banner with custom title</h3>
+<GovUkNotificationBanner Title="Information">
+    <p class="govuk-notification-banner__heading">
+        This service will be unavailable from 6pm on Friday 24 March to 9am on Monday 27 March.
+    </p>
+</GovUkNotificationBanner>

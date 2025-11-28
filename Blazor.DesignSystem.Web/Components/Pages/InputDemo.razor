@@ -1,0 +1,37 @@
+@page "/components/input"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Input - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Text input</h1>
+<p class="govuk-body">Use the text input component when you need to let users enter text that's no longer than a single line.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default input</h3>
+<GovUkInput Id="event-name" Name="event-name" Label="Event name" @bind-Value="eventName" />
+<p class="govuk-body govuk-!-margin-top-2">Value: @eventName</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Input with hint text</h3>
+<GovUkInput Id="ni-number" Name="ni-number" Label="National Insurance number" Hint="It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'." @bind-Value="niNumber" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Input with error</h3>
+<GovUkInput Id="with-error" Name="with-error" Label="National Insurance number" HasError="true" ErrorMessage="Enter a National Insurance number in the correct format" @bind-Value="errorValue" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Input with fixed width</h3>
+<GovUkInput Id="width-20" Name="width-20" Label="20 character width" Width="20" @bind-Value="width20" />
+<GovUkInput Id="width-10" Name="width-10" Label="10 character width" Width="10" @bind-Value="width10" />
+<GovUkInput Id="width-5" Name="width-5" Label="5 character width" Width="5" @bind-Value="width5" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Input with prefix and suffix</h3>
+<p class="govuk-body">For inputs with prefixes or suffixes (like £ or kg), you would need to wrap the input with additional markup using the standard HTML approach.</p>
+
+@code {
+    private string? eventName;
+    private string? niNumber;
+    private string? errorValue;
+    private string? width20;
+    private string? width10;
+    private string? width5;
+}
