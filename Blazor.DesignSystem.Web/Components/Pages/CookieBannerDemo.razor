@@ -1,0 +1,99 @@
+@page "/components/cookie-banner"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Cookie banner - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Cookie banner</h1>
+<p class="govuk-body">Allow users to accept or reject cookies which are not essential to making your service work.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the cookie banner component if your service uses cookies that are not essential, to get user consent.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Cookie banner asking for consent</h3>
+<div style="border: 1px solid #b1b4b6; margin-bottom: 30px;">
+    <GovUkCookieBanner IsHidden="@acceptanceMessageVisible">
+        <GovUkCookieBannerMessage Heading="Cookies on this service" Hidden="@acceptanceMessageVisible">
+            <ChildContent>
+                <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                <p class="govuk-body">We'd also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+            </ChildContent>
+            <Actions>
+                <GovUkButton Text="Accept analytics cookies" OnClick="AcceptCookies" />
+                <GovUkButton Text="Reject analytics cookies" IsSecondary="true" OnClick="RejectCookies" />
+                <a class="govuk-link" href="#">View cookies</a>
+            </Actions>
+        </GovUkCookieBannerMessage>
+    </GovUkCookieBanner>
+</div>
+
+@if (acceptanceMessageVisible)
+{
+    <h3 class="govuk-heading-m">Cookie acceptance message</h3>
+    <div style="border: 1px solid #b1b4b6; margin-bottom: 30px;">
+        <GovUkCookieBanner>
+            <GovUkCookieBannerMessage>
+                <ChildContent>
+                    <p class="govuk-body">You've @(cookiesAccepted ? "accepted" : "rejected") analytics cookies. You can <a class="govuk-link" href="#">change your cookie settings</a> at any time.</p>
+                </ChildContent>
+                <Actions>
+                    <GovUkButton Text="Hide cookie message" OnClick="HideBanner" />
+                </Actions>
+            </GovUkCookieBannerMessage>
+        </GovUkCookieBanner>
+    </div>
+}
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Simple cookie banner</h3>
+<div style="border: 1px solid #b1b4b6; margin-bottom: 30px;">
+    <GovUkCookieBanner AriaLabel="Cookies on Example Service">
+        <GovUkCookieBannerMessage Heading="Cookies on Example Service">
+            <ChildContent>
+                <p class="govuk-body">We use cookies to collect information about how you use Example Service. We use this information to make the website work as well as possible.</p>
+            </ChildContent>
+            <Actions>
+                <a href="#" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+                    Accept additional cookies
+                </a>
+                <a href="#" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                    Reject additional cookies
+                </a>
+                <a class="govuk-link" href="#">View cookies</a>
+            </Actions>
+        </GovUkCookieBannerMessage>
+    </GovUkCookieBanner>
+</div>
+
+<p class="govuk-body govuk-!-margin-top-6">
+    <GovUkButton Text="Reset cookie banner demo" IsSecondary="true" OnClick="ResetDemo" />
+</p>
+
+@code {
+    private bool acceptanceMessageVisible = false;
+    private bool cookiesAccepted = false;
+
+    private void AcceptCookies()
+    {
+        cookiesAccepted = true;
+        acceptanceMessageVisible = true;
+    }
+
+    private void RejectCookies()
+    {
+        cookiesAccepted = false;
+        acceptanceMessageVisible = true;
+    }
+
+    private void HideBanner()
+    {
+        acceptanceMessageVisible = false;
+    }
+
+    private void ResetDemo()
+    {
+        acceptanceMessageVisible = false;
+        cookiesAccepted = false;
+    }
+}

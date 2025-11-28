@@ -1,0 +1,60 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-cookie-banner @CssClass" data-nosnippet role="region" aria-label="@AriaLabel">
+    @if (!IsHidden)
+    {
+        @ChildContent
+    }
+</div>
+
+@code {
+    /// <summary>
+    /// The aria-label for the cookie banner.
+    /// </summary>
+    [Parameter]
+    public string AriaLabel { get; set; } = "Cookies on this service";
+
+    /// <summary>
+    /// Whether the cookie banner is hidden.
+    /// </summary>
+    [Parameter]
+    public bool IsHidden { get; set; }
+
+    /// <summary>
+    /// Callback for when the hidden state changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> IsHiddenChanged { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// The cookie banner messages (should be GovUkCookieBannerMessage components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Hides the cookie banner.
+    /// </summary>
+    public async Task Hide()
+    {
+        IsHidden = true;
+        await IsHiddenChanged.InvokeAsync(IsHidden);
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Shows the cookie banner.
+    /// </summary>
+    public async Task Show()
+    {
+        IsHidden = false;
+        await IsHiddenChanged.InvokeAsync(IsHidden);
+        StateHasChanged();
+    }
+}

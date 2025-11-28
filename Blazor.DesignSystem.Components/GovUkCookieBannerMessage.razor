@@ -1,0 +1,64 @@
+@namespace Blazor.DesignSystem.Components
+
+@if (!Hidden)
+{
+<div class="govuk-cookie-banner__message govuk-width-container @CssClass" @attributes="AdditionalAttributes">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (!string.IsNullOrWhiteSpace(Heading))
+            {
+                <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+                    @Heading
+                </h2>
+            }
+            <div class="govuk-cookie-banner__content">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+    @if (Actions != null)
+    {
+        <div class="govuk-button-group">
+            @Actions
+        </div>
+    }
+</div>
+}
+
+@code {
+    /// <summary>
+    /// The heading text for the message.
+    /// </summary>
+    [Parameter]
+    public string? Heading { get; set; }
+
+    /// <summary>
+    /// The message content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// The action buttons.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Whether the message is hidden.
+    /// </summary>
+    [Parameter]
+    public bool Hidden { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}
