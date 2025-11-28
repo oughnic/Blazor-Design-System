@@ -1,20 +1,57 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<header class="govuk-header" data-module="govuk-header">
+    <div class="govuk-header__container govuk-width-container">
+        <div class="govuk-header__logo">
+            <a href="/" class="govuk-header__link govuk-header__link--homepage">
+                <span class="govuk-header__logotype">
+                    <span class="govuk-header__logotype-text">
+                        GOV.UK
+                    </span>
+                </span>
+                <span class="govuk-header__product-name">
+                    Blazor Design System
+                </span>
+            </a>
         </div>
+        <div class="govuk-header__content">
+            <nav aria-label="Menu" class="govuk-header__navigation">
+                <ul id="navigation" class="govuk-header__navigation-list">
+                    <li class="govuk-header__navigation-item">
+                        <a class="govuk-header__link" href="/">
+                            Home
+                        </a>
+                    </li>
+                    <li class="govuk-header__navigation-item">
+                        <a class="govuk-header__link" href="/components/accordion">
+                            Components
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
 
-        <article class="content px-4">
-            @Body
-        </article>
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper" id="main-content" role="main">
+        @Body
     </main>
 </div>
+
+<footer class="govuk-footer">
+    <div class="govuk-width-container">
+        <div class="govuk-footer__meta">
+            <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+                <span class="govuk-footer__licence-description">
+                    Built with the GOV.UK Design System
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.

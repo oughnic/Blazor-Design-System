@@ -9,5 +9,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "govuk-frontend": "^5.13.0",
+    "sass": "^1.94.2"
+  },
+  "dependencies": {
+    "@types/govuk-frontend": "^5.11.0"
+  }
 }

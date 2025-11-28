@@ -1,0 +1,97 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-accordion @CssClass" data-module="govuk-accordion" id="@Id">
+    <div class="govuk-accordion__controls">
+        <button type="button" 
+                class="govuk-accordion__show-all" 
+                aria-expanded="@(AllExpanded ? "true" : "false")"
+                @onclick="ToggleAll">
+            <span class="govuk-accordion__show-all-text">
+                @if (AllExpanded)
+                {
+                    <text>Hide all sections</text>
+                }
+                else
+                {
+                    <text>Show all sections</text>
+                }
+            </span>
+        </button>
+    </div>
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    private List<GovUkAccordionSection> _sections = new();
+
+    /// <summary>
+    /// The unique identifier for the accordion.
+    /// </summary>
+    [Parameter]
+    public string? Id { get; set; } = $"accordion-{Guid.NewGuid():N}";
+
+    /// <summary>
+    /// Additional CSS classes to apply to the accordion.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// The content of the accordion (should be GovUkAccordionSection components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets whether all sections are expanded.
+    /// </summary>
+    public bool AllExpanded => _sections.Count > 0 && _sections.All(s => s.IsExpanded);
+
+    /// <summary>
+    /// Gets the number of sections in the accordion.
+    /// </summary>
+    public int SectionCount => _sections.Count;
+
+    /// <summary>
+    /// Registers a section with the accordion.
+    /// </summary>
+    internal void RegisterSection(GovUkAccordionSection section)
+    {
+        if (!_sections.Contains(section))
+        {
+            _sections.Add(section);
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Unregisters a section from the accordion.
+    /// </summary>
+    internal void UnregisterSection(GovUkAccordionSection section)
+    {
+        if (_sections.Remove(section))
+        {
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Notifies the accordion that a section's state has changed.
+    /// </summary>
+    internal void NotifySectionStateChanged()
+    {
+        StateHasChanged();
+    }
+
+    private async Task ToggleAll()
+    {
+        var shouldExpand = !AllExpanded;
+        foreach (var section in _sections)
+        {
+            await section.SetExpandedState(shouldExpand);
+        }
+        StateHasChanged();
+    }
+}

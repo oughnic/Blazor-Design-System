@@ -1,0 +1,109 @@
+@namespace Blazor.DesignSystem.Components
+@implements IDisposable
+
+<div class="govuk-accordion__section @(IsExpanded ? "govuk-accordion__section--expanded" : "")">
+    <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+            <button type="button" 
+                    id="@HeadingId"
+                    class="govuk-accordion__section-button" 
+                    aria-controls="@ContentId"
+                    aria-expanded="@(IsExpanded ? "true" : "false")"
+                    @onclick="Toggle">
+                <span class="govuk-accordion__section-heading-text">
+                    <span class="govuk-accordion__section-heading-text-focus">
+                        @Heading
+                    </span>
+                </span>
+                @if (Summary != null)
+                {
+                    <span class="govuk-accordion__section-summary govuk-body" id="@SummaryId">
+                        @Summary
+                    </span>
+                }
+                <span class="govuk-accordion__section-toggle" data-nosnippet>
+                    <span class="govuk-accordion__section-toggle-focus">
+                        <span class="govuk-accordion-nav__chevron @(IsExpanded ? "govuk-accordion-nav__chevron--down" : "")"></span>
+                        <span class="govuk-accordion__section-toggle-text">
+                            @(IsExpanded ? "Hide" : "Show")
+                        </span>
+                    </span>
+                </span>
+            </button>
+        </h2>
+    </div>
+    <div id="@ContentId" 
+         class="govuk-accordion__section-content" 
+         aria-labelledby="@HeadingId"
+         hidden="@(!IsExpanded)">
+        @Content
+    </div>
+</div>
+
+@code {
+    private string HeadingId => $"{ContentId}-heading";
+    private string ContentId { get; set; } = $"accordion-section-{Guid.NewGuid():N}";
+    private string SummaryId => $"{ContentId}-summary";
+
+    [CascadingParameter]
+    private GovUkAccordion? Accordion { get; set; }
+
+    /// <summary>
+    /// The heading text for the accordion section.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Heading { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional summary text that appears below the heading.
+    /// </summary>
+    [Parameter]
+    public string? Summary { get; set; }
+
+    /// <summary>
+    /// The content to display when the section is expanded.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Content { get; set; }
+
+    /// <summary>
+    /// Whether the section is initially expanded.
+    /// </summary>
+    [Parameter]
+    public bool IsExpanded { get; set; } = false;
+
+    /// <summary>
+    /// Callback invoked when the section is toggled.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> IsExpandedChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Accordion?.RegisterSection(this);
+    }
+
+    private async Task Toggle()
+    {
+        await SetExpandedState(!IsExpanded);
+    }
+
+    /// <summary>
+    /// Sets the expanded state of the section.
+    /// </summary>
+    internal async Task SetExpandedState(bool expanded)
+    {
+        if (IsExpanded != expanded)
+        {
+            IsExpanded = expanded;
+            await IsExpandedChanged.InvokeAsync(IsExpanded);
+            Accordion?.NotifySectionStateChanged();
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        Accordion?.UnregisterSection(this);
+    }
+}
