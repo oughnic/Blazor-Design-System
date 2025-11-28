@@ -1,0 +1,41 @@
+@page "/components/breadcrumbs"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Breadcrumbs - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Breadcrumbs</h1>
+<p class="govuk-body">The breadcrumbs component helps users to understand where they are within a website's structure and move between levels.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the breadcrumbs component when you need to help users understand and move between the multiple levels of a website.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default breadcrumbs</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBreadcrumbs>
+        <GovUkBreadcrumbsItem Href="/" Text="Home" />
+        <GovUkBreadcrumbsItem Href="/section" Text="Section" />
+        <GovUkBreadcrumbsItem Href="/section/sub-section" Text="Sub-section" />
+    </GovUkBreadcrumbs>
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Breadcrumbs with current page</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBreadcrumbs>
+        <GovUkBreadcrumbsItem Href="/" Text="Home" />
+        <GovUkBreadcrumbsItem Href="/passports" Text="Passports, travel and living abroad" />
+        <GovUkBreadcrumbsItem Href="/passports/overseas" Text="Travel abroad" />
+        <GovUkBreadcrumbsItem Text="Get a passport" IsCurrentPage="true" />
+    </GovUkBreadcrumbs>
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Breadcrumbs on a content page</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBreadcrumbs>
+        <GovUkBreadcrumbsItem Href="/" Text="Home" />
+        <GovUkBreadcrumbsItem Href="/browse/benefits" Text="Benefits" />
+        <GovUkBreadcrumbsItem Text="Jobseeker's Allowance (JSA)" IsCurrentPage="true" />
+    </GovUkBreadcrumbs>
+</div>

@@ -1,0 +1,49 @@
+@page "/components/button"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Button - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Button</h1>
+<p class="govuk-body">Use the button component to help users carry out an action like starting an application or saving their information.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default button</h3>
+<GovUkButton Text="Save and continue" OnClick="HandleClick" />
+<p class="govuk-body govuk-!-margin-top-2">@buttonMessage</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Secondary button</h3>
+<GovUkButton Text="Find address" IsSecondary="true" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Warning button</h3>
+<GovUkButton Text="Delete account" IsWarning="true" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Disabled button</h3>
+<GovUkButton Text="Disabled button" Disabled="true" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Start button</h3>
+<GovUkButton Text="Start now" IsStart="true" Href="/start" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Button as link</h3>
+<GovUkButton Text="Go to homepage" Href="/" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Button group</h3>
+<div class="govuk-button-group">
+    <GovUkButton Text="Save and continue" />
+    <GovUkButton Text="Save as draft" IsSecondary="true" />
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Button with custom content</h3>
+<GovUkButton>
+    <span>Custom content with <strong>bold text</strong></span>
+</GovUkButton>
+
+@code {
+    private string buttonMessage = "Click the button to see this message change.";
+
+    private void HandleClick()
+    {
+        buttonMessage = $"Button clicked at {DateTime.Now:HH:mm:ss}";
+    }
+}

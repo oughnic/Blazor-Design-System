@@ -1,0 +1,40 @@
+@page "/components/back-link"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Back link - GOV.UK Design System</PageTitle>
+
+<GovUkBackLink Href="/" />
+
+<h1 class="govuk-heading-xl">Back link</h1>
+<p class="govuk-body">Use the back link component to help users go back to the previous page in a multi-page transaction.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Always include the back link component on GOV.UK question pages.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default back link</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBackLink Href="/" />
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Back link with custom text</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBackLink Href="/previous-page" Text="Go back to previous page" />
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Back link with click handler</h3>
+<div class="govuk-!-padding-3" style="background-color: #f3f2f1;">
+    <GovUkBackLink Href="#" Text="Back" PreventDefault="true" OnClick="HandleBackClick" />
+    <p class="govuk-body govuk-!-margin-top-2">@clickMessage</p>
+</div>
+
+@code {
+    private string clickMessage = "Click the back link to see this message change.";
+
+    private void HandleBackClick()
+    {
+        clickMessage = "Back link was clicked! In a real app, you might use JavaScript interop to navigate back.";
+    }
+}

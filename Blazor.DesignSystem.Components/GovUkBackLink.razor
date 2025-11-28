@@ -1,0 +1,40 @@
+@namespace Blazor.DesignSystem.Components
+
+<a href="@Href" class="govuk-back-link @CssClass" @onclick="HandleClick" @onclick:preventDefault="@PreventDefault">@Text</a>
+
+@code {
+    /// <summary>
+    /// The URL to link to.
+    /// </summary>
+    [Parameter]
+    public string Href { get; set; } = "#";
+
+    /// <summary>
+    /// The link text. Defaults to "Back".
+    /// </summary>
+    [Parameter]
+    public string Text { get; set; } = "Back";
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Callback for when the link is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Microsoft.AspNetCore.Components.Web.MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Whether to prevent the default navigation behavior.
+    /// </summary>
+    [Parameter]
+    public bool PreventDefault { get; set; }
+
+    private async Task HandleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
+    {
+        await OnClick.InvokeAsync(args);
+    }
+}

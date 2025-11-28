@@ -1,0 +1,156 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-form-group @(HasError ? "govuk-form-group--error" : "") @CssClass">
+    <fieldset class="govuk-fieldset" aria-describedby="@GetAriaDescribedBy()">
+        @if (!string.IsNullOrWhiteSpace(Legend))
+        {
+            <legend class="govuk-fieldset__legend @LegendCssClass">
+                @if (IsPageHeading)
+                {
+                    <h1 class="govuk-fieldset__heading">
+                        @Legend
+                    </h1>
+                }
+                else
+                {
+                    @Legend
+                }
+            </legend>
+        }
+        @if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            <div id="@(Name)-hint" class="govuk-hint">
+                @Hint
+            </div>
+        }
+        @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <p id="@(Name)-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            </p>
+        }
+        <div class="govuk-checkboxes @(IsSmall ? "govuk-checkboxes--small" : "")" data-module="govuk-checkboxes">
+            <CascadingValue Value="this">
+                @ChildContent
+            </CascadingValue>
+        </div>
+    </fieldset>
+</div>
+
+@code {
+    private List<string> _selectedValues = new();
+
+    /// <summary>
+    /// The name attribute for the checkbox group.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The legend text for the fieldset.
+    /// </summary>
+    [Parameter]
+    public string? Legend { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the legend.
+    /// </summary>
+    [Parameter]
+    public string? LegendCssClass { get; set; }
+
+    /// <summary>
+    /// Whether the legend should be styled as a page heading.
+    /// </summary>
+    [Parameter]
+    public bool IsPageHeading { get; set; }
+
+    /// <summary>
+    /// Hint text to display below the legend.
+    /// </summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    /// <summary>
+    /// Whether the field has an error.
+    /// </summary>
+    [Parameter]
+    public bool HasError { get; set; }
+
+    /// <summary>
+    /// The error message to display.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Whether to use smaller checkboxes.
+    /// </summary>
+    [Parameter]
+    public bool IsSmall { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// The checkbox items (should be GovUkCheckboxItem components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// The selected values.
+    /// </summary>
+    [Parameter]
+    public List<string>? SelectedValues { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _selectedValues = SelectedValues ?? new List<string>();
+    }
+
+    /// <summary>
+    /// Callback for when the selected values change.
+    /// </summary>
+    [Parameter]
+    public EventCallback<List<string>> SelectedValuesChanged { get; set; }
+
+    internal bool IsSelected(string value)
+    {
+        return _selectedValues.Contains(value);
+    }
+
+    internal async Task ToggleValue(string value, bool isChecked)
+    {
+        if (isChecked && !_selectedValues.Contains(value))
+        {
+            _selectedValues.Add(value);
+        }
+        else if (!isChecked && _selectedValues.Contains(value))
+        {
+            _selectedValues.Remove(value);
+        }
+        
+        await SelectedValuesChanged.InvokeAsync(_selectedValues);
+        StateHasChanged();
+    }
+
+    private string GetAriaDescribedBy()
+    {
+        var parts = new List<string>();
+        
+        if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            parts.Add($"{Name}-hint");
+        }
+        
+        if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            parts.Add($"{Name}-error");
+        }
+        
+        return string.Join(" ", parts);
+    }
+}

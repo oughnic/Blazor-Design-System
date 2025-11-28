@@ -1,0 +1,169 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-character-count @CssClass" data-module="govuk-character-count" data-maxlength="@MaxLength">
+    <div class="govuk-form-group @(HasError ? "govuk-form-group--error" : "")">
+        @if (!string.IsNullOrWhiteSpace(Label))
+        {
+            <label class="govuk-label @LabelCssClass" for="@Id">
+                @Label
+            </label>
+        }
+        @if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            <div id="@(Id)-hint" class="govuk-hint">
+                @Hint
+            </div>
+        }
+        @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <p id="@(Id)-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            </p>
+        }
+        <textarea class="govuk-textarea govuk-js-character-count @(HasError ? "govuk-textarea--error" : "") @TextAreaCssClass" 
+                  id="@Id" 
+                  name="@Name" 
+                  rows="@Rows"
+                  aria-describedby="@GetAriaDescribedBy()"
+                  value="@Value"
+                  @oninput="HandleInput">
+        </textarea>
+    </div>
+    <div id="@(Id)-info" class="govuk-hint govuk-character-count__message">
+        @GetCountMessage()
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// The unique identifier for the textarea.
+    /// </summary>
+    [Parameter]
+    public string Id { get; set; } = $"character-count-{Guid.NewGuid():N}";
+
+    /// <summary>
+    /// The name attribute for the textarea.
+    /// </summary>
+    [Parameter]
+    public string? Name { get; set; }
+
+    /// <summary>
+    /// The label text for the textarea.
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the label.
+    /// </summary>
+    [Parameter]
+    public string? LabelCssClass { get; set; }
+
+    /// <summary>
+    /// Hint text to display below the label.
+    /// </summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    /// <summary>
+    /// The maximum number of characters allowed.
+    /// </summary>
+    [Parameter]
+    public int MaxLength { get; set; } = 200;
+
+    /// <summary>
+    /// The number of rows for the textarea.
+    /// </summary>
+    [Parameter]
+    public int Rows { get; set; } = 5;
+
+    /// <summary>
+    /// The current value of the textarea.
+    /// </summary>
+    [Parameter]
+    public string? Value { get; set; }
+
+    /// <summary>
+    /// Callback for when the value changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+
+    /// <summary>
+    /// Whether the field has an error.
+    /// </summary>
+    [Parameter]
+    public bool HasError { get; set; }
+
+    /// <summary>
+    /// The error message to display.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply to the component.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply to the textarea.
+    /// </summary>
+    [Parameter]
+    public string? TextAreaCssClass { get; set; }
+
+    /// <summary>
+    /// The threshold percentage at which to show the count. Default is 100 (always show).
+    /// </summary>
+    [Parameter]
+    public int Threshold { get; set; } = 100;
+
+    private int CharacterCount => Value?.Length ?? 0;
+    private int RemainingCharacters => MaxLength - CharacterCount;
+    private bool IsOverLimit => CharacterCount > MaxLength;
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString();
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    private string GetCountMessage()
+    {
+        var remaining = RemainingCharacters;
+        var abs = Math.Abs(remaining);
+        
+        if (remaining >= 0)
+        {
+            return remaining == 1 
+                ? "You have 1 character remaining" 
+                : $"You have {remaining} characters remaining";
+        }
+        else
+        {
+            return abs == 1 
+                ? "You have 1 character too many" 
+                : $"You have {abs} characters too many";
+        }
+    }
+
+    private string GetAriaDescribedBy()
+    {
+        var parts = new List<string>();
+        
+        if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            parts.Add($"{Id}-hint");
+        }
+        
+        if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            parts.Add($"{Id}-error");
+        }
+        
+        parts.Add($"{Id}-info");
+        
+        return string.Join(" ", parts);
+    }
+}

@@ -1,0 +1,151 @@
+@namespace Blazor.DesignSystem.Components
+
+@{
+    var buttonClass = "govuk-button";
+    if (IsSecondary)
+    {
+        buttonClass += " govuk-button--secondary";
+    }
+    if (IsWarning)
+    {
+        buttonClass += " govuk-button--warning";
+    }
+    if (IsStart)
+    {
+        buttonClass += " govuk-button--start";
+    }
+    if (Disabled)
+    {
+        buttonClass += " govuk-button--disabled";
+    }
+    if (!string.IsNullOrWhiteSpace(CssClass))
+    {
+        buttonClass += $" {CssClass}";
+    }
+}
+
+@if (!string.IsNullOrWhiteSpace(Href))
+{
+    <a href="@Href" 
+       role="button" 
+       draggable="false" 
+       class="@buttonClass" 
+       data-module="govuk-button"
+       @attributes="AdditionalAttributes">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Text
+        }
+        @if (IsStart)
+        {
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
+            </svg>
+        }
+    </a>
+}
+else
+{
+    <button type="@Type" 
+            class="@buttonClass" 
+            disabled="@Disabled"
+            aria-disabled="@(Disabled ? "true" : null)"
+            data-module="govuk-button"
+            @onclick="HandleClick"
+            @attributes="AdditionalAttributes">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Text
+        }
+        @if (IsStart)
+        {
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"/>
+            </svg>
+        }
+    </button>
+}
+
+@code {
+    /// <summary>
+    /// The button text.
+    /// </summary>
+    [Parameter]
+    public string? Text { get; set; }
+
+    /// <summary>
+    /// The button content (takes precedence over Text).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// If set, renders as an anchor element instead of a button.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>
+    /// The button type (button, submit, reset). Defaults to "submit".
+    /// </summary>
+    [Parameter]
+    public string Type { get; set; } = "submit";
+
+    /// <summary>
+    /// Whether the button is disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Whether to use secondary button styling.
+    /// </summary>
+    [Parameter]
+    public bool IsSecondary { get; set; }
+
+    /// <summary>
+    /// Whether to use warning button styling.
+    /// </summary>
+    [Parameter]
+    public bool IsWarning { get; set; }
+
+    /// <summary>
+    /// Whether to use start button styling (includes arrow icon).
+    /// </summary>
+    [Parameter]
+    public bool IsStart { get; set; }
+
+    /// <summary>
+    /// Callback for when the button is clicked.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Microsoft.AspNetCore.Components.Web.MouseEventArgs> OnClick { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply to the element.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private async Task HandleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
+    {
+        if (!Disabled)
+        {
+            await OnClick.InvokeAsync(args);
+        }
+    }
+}

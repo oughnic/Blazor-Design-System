@@ -1,0 +1,21 @@
+@namespace Blazor.DesignSystem.Components
+
+<nav class="govuk-breadcrumbs @CssClass" aria-label="Breadcrumb">
+    <ol class="govuk-breadcrumbs__list">
+        @ChildContent
+    </ol>
+</nav>
+
+@code {
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// The breadcrumb items (should be GovUkBreadcrumbsItem components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

@@ -1,0 +1,81 @@
+@page "/components/checkboxes"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Checkboxes - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Checkboxes</h1>
+<p class="govuk-body">Let users select one or more options by using the checkboxes component.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the checkboxes component when you need to help users select multiple options from a list, or toggle a single option on or off.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default checkboxes</h3>
+<GovUkCheckboxes Name="waste" Legend="Which types of waste do you transport?" LegendCssClass="govuk-fieldset__legend--l" @bind-SelectedValues="selectedWaste">
+    <GovUkCheckboxItem Value="carcasses" Label="Waste from animal carcasses" />
+    <GovUkCheckboxItem Value="mines" Label="Waste from mines or quarries" />
+    <GovUkCheckboxItem Value="farm" Label="Farm or agricultural waste" />
+</GovUkCheckboxes>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @string.Join(", ", selectedWaste)</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Checkboxes with hints</h3>
+<GovUkCheckboxes Name="nationality" Legend="What is your nationality?" Hint="If you have dual nationality, select all options that are relevant to you." LegendCssClass="govuk-fieldset__legend--l" @bind-SelectedValues="selectedNationality">
+    <GovUkCheckboxItem Value="british" Label="British" Hint="including English, Scottish, Welsh and Northern Irish" />
+    <GovUkCheckboxItem Value="irish" Label="Irish" />
+    <GovUkCheckboxItem Value="other" Label="Citizen of another country" />
+</GovUkCheckboxes>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @string.Join(", ", selectedNationality)</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Checkboxes with error</h3>
+<GovUkCheckboxes Name="organisation" Legend="Which organisation do you work for?" HasError="true" ErrorMessage="Select which organisation you work for" @bind-SelectedValues="selectedOrganisation">
+    <GovUkCheckboxItem Value="hmrc" Label="HM Revenue and Customs (HMRC)" />
+    <GovUkCheckboxItem Value="dfe" Label="Department for Education" />
+    <GovUkCheckboxItem Value="dwp" Label="Department for Work and Pensions" />
+</GovUkCheckboxes>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Checkboxes with conditional content</h3>
+<GovUkCheckboxes Name="contact" Legend="How would you like to be contacted?" @bind-SelectedValues="selectedContact">
+    <GovUkCheckboxItem Value="email" Label="Email" HasConditional="true">
+        <ConditionalContent>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="contact-email">Email address</label>
+                <input class="govuk-input govuk-!-width-one-half" id="contact-email" name="contact-email" type="email">
+            </div>
+        </ConditionalContent>
+    </GovUkCheckboxItem>
+    <GovUkCheckboxItem Value="phone" Label="Phone" HasConditional="true">
+        <ConditionalContent>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="contact-phone">Phone number</label>
+                <input class="govuk-input govuk-!-width-one-half" id="contact-phone" name="contact-phone" type="tel">
+            </div>
+        </ConditionalContent>
+    </GovUkCheckboxItem>
+    <GovUkCheckboxItem Value="text" Label="Text message" HasConditional="true">
+        <ConditionalContent>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="contact-text">Mobile phone number</label>
+                <input class="govuk-input govuk-!-width-one-half" id="contact-text" name="contact-text" type="tel">
+            </div>
+        </ConditionalContent>
+    </GovUkCheckboxItem>
+</GovUkCheckboxes>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @string.Join(", ", selectedContact)</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Small checkboxes</h3>
+<GovUkCheckboxes Name="filter" Legend="Filter by" IsSmall="true" @bind-SelectedValues="selectedFilter">
+    <GovUkCheckboxItem Value="primary" Label="Primary schools" />
+    <GovUkCheckboxItem Value="secondary" Label="Secondary schools" />
+    <GovUkCheckboxItem Value="special" Label="Special schools" />
+</GovUkCheckboxes>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @string.Join(", ", selectedFilter)</p>
+
+@code {
+    private List<string> selectedWaste = new();
+    private List<string> selectedNationality = new();
+    private List<string> selectedOrganisation = new();
+    private List<string> selectedContact = new();
+    private List<string> selectedFilter = new();
+}

@@ -1,0 +1,32 @@
+@namespace Blazor.DesignSystem.Components
+
+@if (IsCurrentPage)
+{
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">@Text</li>
+}
+else
+{
+    <li class="govuk-breadcrumbs__list-item">
+        <a class="govuk-breadcrumbs__link" href="@Href">@Text</a>
+    </li>
+}
+
+@code {
+    /// <summary>
+    /// The URL to link to.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>
+    /// The text to display.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Whether this is the current page (no link, shown with aria-current="page").
+    /// </summary>
+    [Parameter]
+    public bool IsCurrentPage { get; set; }
+}

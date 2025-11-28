@@ -1,0 +1,120 @@
+@namespace Blazor.DesignSystem.Components
+
+@{
+    var itemId = !string.IsNullOrWhiteSpace(Id) ? Id : $"{Checkboxes?.Name}-{Index}";
+}
+
+<div class="govuk-checkboxes__item">
+    <input class="govuk-checkboxes__input" 
+           id="@itemId" 
+           name="@Checkboxes?.Name" 
+           type="checkbox" 
+           value="@Value"
+           checked="@IsChecked"
+           disabled="@Disabled"
+           @onchange="HandleChange"
+           aria-describedby="@GetAriaDescribedBy(itemId)">
+    <label class="govuk-label govuk-checkboxes__label" for="@itemId">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Label
+        }
+    </label>
+    @if (!string.IsNullOrWhiteSpace(Hint))
+    {
+        <div id="@(itemId)-hint" class="govuk-hint govuk-checkboxes__hint">
+            @Hint
+        </div>
+    }
+</div>
+@if (HasConditional && ConditionalContent != null)
+{
+    <div class="govuk-checkboxes__conditional @(IsChecked ? "" : "govuk-checkboxes__conditional--hidden")" id="conditional-@itemId">
+        @ConditionalContent
+    </div>
+}
+
+@code {
+    private static int _globalIndex = 0;
+    private int Index { get; set; }
+
+    [CascadingParameter]
+    private GovUkCheckboxes? Checkboxes { get; set; }
+
+    /// <summary>
+    /// The unique identifier for the checkbox.
+    /// </summary>
+    [Parameter]
+    public string? Id { get; set; }
+
+    /// <summary>
+    /// The value of the checkbox.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Value { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The label text for the checkbox.
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; }
+
+    /// <summary>
+    /// The label content (takes precedence over Label).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Hint text to display below the label.
+    /// </summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    /// <summary>
+    /// Whether the checkbox is disabled.
+    /// </summary>
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// Whether the checkbox has conditional content.
+    /// </summary>
+    [Parameter]
+    public bool HasConditional { get; set; }
+
+    /// <summary>
+    /// Content to display when the checkbox is checked.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ConditionalContent { get; set; }
+
+    private bool IsChecked => Checkboxes?.IsSelected(Value) ?? false;
+
+    protected override void OnInitialized()
+    {
+        Index = Interlocked.Increment(ref _globalIndex);
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        var isChecked = (bool)(e.Value ?? false);
+        if (Checkboxes != null)
+        {
+            await Checkboxes.ToggleValue(Value, isChecked);
+        }
+    }
+
+    private string? GetAriaDescribedBy(string itemId)
+    {
+        if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            return $"{itemId}-hint";
+        }
+        return null;
+    }
+}

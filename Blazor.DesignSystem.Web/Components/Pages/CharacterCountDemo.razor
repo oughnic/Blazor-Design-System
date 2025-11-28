@@ -1,0 +1,56 @@
+@page "/components/character-count"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Character count - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Character count</h1>
+<p class="govuk-body">Help users know how much text they can enter when there is a limit on the number of characters.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Always test your service without a character count first. Only use the character count component when there is a good reason for limiting the number of characters users can enter.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default character count</h3>
+<GovUkCharacterCount 
+    Id="more-detail" 
+    Name="more-detail"
+    Label="Can you provide more detail?"
+    Hint="Do not include personal or financial information like your National Insurance number or credit card details."
+    MaxLength="200"
+    @bind-Value="textValue1" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Character count with error</h3>
+<GovUkCharacterCount 
+    Id="with-error" 
+    Name="with-error"
+    Label="Describe the event"
+    MaxLength="150"
+    HasError="true"
+    ErrorMessage="Event description must be 150 characters or less"
+    @bind-Value="textValue2" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Character count with custom rows</h3>
+<GovUkCharacterCount 
+    Id="custom-rows" 
+    Name="custom-rows"
+    Label="Enter your feedback"
+    MaxLength="500"
+    Rows="10"
+    @bind-Value="textValue3" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Character count showing over limit</h3>
+<GovUkCharacterCount 
+    Id="over-limit" 
+    Name="over-limit"
+    Label="Write a short summary"
+    MaxLength="50"
+    @bind-Value="textValue4" />
+
+@code {
+    private string? textValue1;
+    private string? textValue2 = "This is an example error state where the text exceeds the allowed character limit and the error message is displayed to inform the user about the issue.";
+    private string? textValue3;
+    private string? textValue4 = "This text is longer than the maximum allowed character limit of 50 characters.";
+}
