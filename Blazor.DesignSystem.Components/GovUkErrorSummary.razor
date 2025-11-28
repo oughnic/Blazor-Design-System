@@ -100,7 +100,7 @@
     /// </summary>
     public async Task FocusErrorSummaryAsync()
     {
-        await JSRuntime.InvokeVoidAsync("eval", $"document.querySelector('[data-module=\"govuk-error-summary\"]')?.focus()");
+        await JSRuntime.InvokeVoidAsync("GovUkDesignSystem.focusErrorSummary");
     }
 
     private async Task HandleErrorClick(string? fieldId)
@@ -109,33 +109,7 @@
             return;
 
         // Scroll the target element into view and focus it
-        await JSRuntime.InvokeVoidAsync("eval", $@"
-            (function() {{
-                var input = document.getElementById('{fieldId}');
-                if (!input) return;
-                
-                // Find associated legend or label
-                var fieldset = input.closest('fieldset');
-                var legendOrLabel = null;
-                
-                if (fieldset) {{
-                    var legends = fieldset.getElementsByTagName('legend');
-                    if (legends.length) {{
-                        legendOrLabel = legends[0];
-                    }}
-                }}
-                
-                if (!legendOrLabel) {{
-                    legendOrLabel = document.querySelector('label[for=""' + '{fieldId}' + '""]') || input.closest('label');
-                }}
-                
-                if (legendOrLabel) {{
-                    legendOrLabel.scrollIntoView();
-                }}
-                
-                input.focus({{ preventScroll: true }});
-            }})();
-        ");
+        await JSRuntime.InvokeVoidAsync("GovUkDesignSystem.navigateToField", fieldId);
     }
 
     /// <summary>
