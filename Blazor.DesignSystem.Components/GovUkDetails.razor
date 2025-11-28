@@ -1,0 +1,38 @@
+@namespace Blazor.DesignSystem.Components
+
+<details class="govuk-details @CssClass" @attributes="AdditionalAttributes">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            @Summary
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        @ChildContent
+    </div>
+</details>
+
+@code {
+    /// <summary>
+    /// The summary text displayed when details are closed.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Summary { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The detail content to display when expanded.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

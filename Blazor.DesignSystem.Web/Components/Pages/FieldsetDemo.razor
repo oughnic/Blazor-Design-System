@@ -1,0 +1,25 @@
+@page "/components/fieldset"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Fieldset - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Fieldset</h1>
+<p class="govuk-body">Use the fieldset component to group related form inputs.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the fieldset component when you need to show a relationship between multiple form inputs. For example, you may need to group a set of text inputs into a single fieldset when asking for an address.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default fieldset</h3>
+<GovUkFieldset Legend="What is your address?" LegendCssClass="govuk-fieldset__legend--l">
+    <GovUkInput Id="address-line-1" Name="address-line-1" Label="Building and street" />
+    <GovUkInput Id="address-line-2" Name="address-line-2" Label="" LabelCssClass="govuk-visually-hidden" />
+    <GovUkInput Id="address-town" Name="address-town" Label="Town or city" Width="two-thirds" />
+    <GovUkInput Id="address-postcode" Name="address-postcode" Label="Postcode" Width="10" />
+</GovUkFieldset>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Fieldset as page heading</h3>
+<GovUkFieldset Legend="What is your date of birth?" LegendCssClass="govuk-fieldset__legend--l" IsPageHeading="true">
+    <p class="govuk-body">The fieldset component groups related form elements together.</p>
+</GovUkFieldset>

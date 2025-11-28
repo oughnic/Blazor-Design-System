@@ -1,0 +1,70 @@
+@namespace Blazor.DesignSystem.Components
+
+@{
+    var labelClass = "govuk-label";
+    if (IsPageHeading)
+    {
+        labelClass += " govuk-label--l";
+    }
+    if (!string.IsNullOrWhiteSpace(Size))
+    {
+        labelClass += $" govuk-label--{Size}";
+    }
+    if (!string.IsNullOrWhiteSpace(CssClass))
+    {
+        labelClass += $" {CssClass}";
+    }
+}
+
+@if (IsPageHeading)
+{
+    <h1 class="govuk-label-wrapper">
+        <label class="@labelClass" for="@For" @attributes="AdditionalAttributes">
+            @ChildContent
+        </label>
+    </h1>
+}
+else
+{
+    <label class="@labelClass" for="@For" @attributes="AdditionalAttributes">
+        @ChildContent
+    </label>
+}
+
+@code {
+    /// <summary>
+    /// The ID of the input element this label is for.
+    /// </summary>
+    [Parameter]
+    public string? For { get; set; }
+
+    /// <summary>
+    /// The label text content.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Whether the label should be styled as a page heading.
+    /// </summary>
+    [Parameter]
+    public bool IsPageHeading { get; set; }
+
+    /// <summary>
+    /// The label size (e.g., "s", "m", "l", "xl").
+    /// </summary>
+    [Parameter]
+    public string? Size { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

@@ -1,0 +1,52 @@
+@page "/components/pagination"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Pagination - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Pagination</h1>
+<p class="govuk-body">Help users navigate forwards and backwards through a series of pages.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default pagination</h3>
+<GovUkPagination PreviousHref="#" NextHref="#">
+    <PageItems>
+        <GovUkPaginationItem Number="1" Href="#" />
+        <GovUkPaginationItem Number="2" Href="#" IsCurrent="true" />
+        <GovUkPaginationItem Number="3" Href="#" />
+    </PageItems>
+</GovUkPagination>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Pagination with ellipsis</h3>
+<GovUkPagination PreviousHref="#" NextHref="#">
+    <PageItems>
+        <GovUkPaginationItem Number="1" Href="#" />
+        <GovUkPaginationItem IsEllipsis="true" />
+        <GovUkPaginationItem Number="5" Href="#" />
+        <GovUkPaginationItem Number="6" Href="#" IsCurrent="true" />
+        <GovUkPaginationItem Number="7" Href="#" />
+        <GovUkPaginationItem IsEllipsis="true" />
+        <GovUkPaginationItem Number="42" Href="#" />
+    </PageItems>
+</GovUkPagination>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Pagination for first page</h3>
+<GovUkPagination NextHref="#">
+    <PageItems>
+        <GovUkPaginationItem Number="1" IsCurrent="true" />
+        <GovUkPaginationItem Number="2" Href="#" />
+        <GovUkPaginationItem Number="3" Href="#" />
+    </PageItems>
+</GovUkPagination>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Pagination for last page</h3>
+<GovUkPagination PreviousHref="#">
+    <PageItems>
+        <GovUkPaginationItem Number="1" Href="#" />
+        <GovUkPaginationItem Number="2" Href="#" />
+        <GovUkPaginationItem Number="3" IsCurrent="true" />
+    </PageItems>
+</GovUkPagination>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Pagination with labels</h3>
+<GovUkPagination PreviousHref="#" PreviousLabel="Applying for a provisional lorry licence" NextHref="#" NextLabel="Driver CPC part 1 test: theory" />

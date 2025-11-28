@@ -2,21 +2,21 @@
 @using System.Threading
 
 @{
-    var itemId = !string.IsNullOrWhiteSpace(Id) ? Id : $"{Checkboxes?.Name}-{Index}";
+    var itemId = !string.IsNullOrWhiteSpace(Id) ? Id : $"{Radios?.Name}-{Index}";
 }
 
-<div class="govuk-checkboxes__item">
-    <input class="govuk-checkboxes__input" 
+<div class="govuk-radios__item">
+    <input class="govuk-radios__input" 
            id="@itemId" 
-           name="@Checkboxes?.Name" 
-           type="checkbox" 
+           name="@Radios?.Name" 
+           type="radio" 
            value="@Value"
            checked="@IsChecked"
            disabled="@Disabled"
            @onchange="HandleChange"
            aria-describedby="@GetAriaDescribedBy(itemId)"
            aria-controls="@(HasConditional && ConditionalContent != null ? $"conditional-{itemId}" : null)">
-    <label class="govuk-label govuk-checkboxes__label" for="@itemId">
+    <label class="govuk-label govuk-radios__label" for="@itemId">
         @if (ChildContent != null)
         {
             @ChildContent
@@ -28,14 +28,14 @@
     </label>
     @if (!string.IsNullOrWhiteSpace(Hint))
     {
-        <div id="@(itemId)-hint" class="govuk-hint govuk-checkboxes__hint">
+        <div id="@(itemId)-hint" class="govuk-hint govuk-radios__hint">
             @Hint
         </div>
     }
 </div>
 @if (HasConditional && ConditionalContent != null)
 {
-    <div class="govuk-checkboxes__conditional @(IsChecked ? "" : "govuk-checkboxes__conditional--hidden")" id="conditional-@itemId">
+    <div class="govuk-radios__conditional @(IsChecked ? "" : "govuk-radios__conditional--hidden")" id="conditional-@itemId">
         @ConditionalContent
     </div>
 }
@@ -45,22 +45,22 @@
     private int Index { get; set; }
 
     [CascadingParameter]
-    private GovUkCheckboxes? Checkboxes { get; set; }
+    private GovUkRadios? Radios { get; set; }
 
     /// <summary>
-    /// The unique identifier for the checkbox.
+    /// The unique identifier for the radio.
     /// </summary>
     [Parameter]
     public string? Id { get; set; }
 
     /// <summary>
-    /// The value of the checkbox.
+    /// The value of the radio.
     /// </summary>
     [Parameter, EditorRequired]
     public string Value { get; set; } = string.Empty;
 
     /// <summary>
-    /// The label text for the checkbox.
+    /// The label text for the radio.
     /// </summary>
     [Parameter]
     public string? Label { get; set; }
@@ -78,24 +78,24 @@
     public string? Hint { get; set; }
 
     /// <summary>
-    /// Whether the checkbox is disabled.
+    /// Whether the radio is disabled.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Whether the checkbox has conditional content.
+    /// Whether the radio has conditional content.
     /// </summary>
     [Parameter]
     public bool HasConditional { get; set; }
 
     /// <summary>
-    /// Content to display when the checkbox is checked.
+    /// Content to display when the radio is selected.
     /// </summary>
     [Parameter]
     public RenderFragment? ConditionalContent { get; set; }
 
-    private bool IsChecked => Checkboxes?.IsSelected(Value) ?? false;
+    private bool IsChecked => Radios?.IsSelected(Value) ?? false;
 
     protected override void OnInitialized()
     {
@@ -104,10 +104,9 @@
 
     private async Task HandleChange(ChangeEventArgs e)
     {
-        var isChecked = (bool)(e.Value ?? false);
-        if (Checkboxes != null)
+        if (Radios != null)
         {
-            await Checkboxes.ToggleValue(Value, isChecked);
+            await Radios.SelectValue(Value);
         }
     }
 

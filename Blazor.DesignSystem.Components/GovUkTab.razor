@@ -1,0 +1,44 @@
+@namespace Blazor.DesignSystem.Components
+@implements IDisposable
+
+@{
+    var isActive = Tabs?.IsTabActive(Id) ?? false;
+}
+
+<li class="govuk-tabs__list-item @(isActive ? "govuk-tabs__list-item--selected" : "")" role="presentation">
+    <a class="govuk-tabs__tab" id="tab_@Id" href="#@Id" @onclick="HandleClick" @onclick:preventDefault role="tab" aria-controls="@Id" aria-selected="@(isActive ? "true" : "false")" tabindex="@(isActive ? "0" : "-1")">
+        @Label
+    </a>
+</li>
+
+@code {
+    [CascadingParameter]
+    private GovUkTabs? Tabs { get; set; }
+
+    /// <summary>
+    /// The unique identifier for the tab (must match the panel ID).
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The tab label text.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Tabs?.RegisterTab(this);
+    }
+
+    private void HandleClick()
+    {
+        Tabs?.SelectTab(Id);
+    }
+
+    public void Dispose()
+    {
+        Tabs?.UnregisterTab(this);
+    }
+}

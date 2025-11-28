@@ -1,0 +1,25 @@
+@namespace Blazor.DesignSystem.Components
+
+<li class="govuk-footer__inline-list-item">
+    <a class="govuk-footer__link" href="@Href" @attributes="AdditionalAttributes">@Text</a>
+</li>
+
+@code {
+    /// <summary>
+    /// The URL for the link.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>
+    /// The link text.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

@@ -1,0 +1,22 @@
+@page "/components/panel"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Panel - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Panel</h1>
+<p class="govuk-body">The panel component is a visible container used on confirmation or results pages to highlight important content.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the panel component to display important information when a transaction has been completed.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default panel</h3>
+<GovUkPanel Title="Application complete">
+    Your reference number<br><strong>HDJ2123F</strong>
+</GovUkPanel>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Panel with additional information</h3>
+<GovUkPanel Title="Payment received">
+    Your payment of £150.00 has been received<br><strong>Reference: ABC123XYZ</strong>
+</GovUkPanel>

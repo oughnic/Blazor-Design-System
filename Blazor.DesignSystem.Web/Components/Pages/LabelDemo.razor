@@ -1,0 +1,33 @@
+@page "/components/label"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Label - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Label</h1>
+<p class="govuk-body">Use labels for all form inputs.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">All form fields should have a visible and clear label.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default label</h3>
+<GovUkLabel For="default-input">Event name</GovUkLabel>
+<input class="govuk-input" id="default-input" name="default-input" type="text">
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Label as page heading</h3>
+<GovUkLabel For="page-heading-input" IsPageHeading="true" Size="l">What is the name of the event?</GovUkLabel>
+<input class="govuk-input" id="page-heading-input" name="page-heading-input" type="text">
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Label sizes</h3>
+<GovUkLabel For="xl-input" Size="xl">Extra large label</GovUkLabel>
+<input class="govuk-input govuk-!-margin-bottom-4" id="xl-input" name="xl-input" type="text">
+
+<GovUkLabel For="l-input" Size="l">Large label</GovUkLabel>
+<input class="govuk-input govuk-!-margin-bottom-4" id="l-input" name="l-input" type="text">
+
+<GovUkLabel For="m-input" Size="m">Medium label</GovUkLabel>
+<input class="govuk-input govuk-!-margin-bottom-4" id="m-input" name="m-input" type="text">
+
+<GovUkLabel For="s-input" Size="s">Small label</GovUkLabel>
+<input class="govuk-input" id="s-input" name="s-input" type="text">

@@ -1,0 +1,25 @@
+@page "/components/file-upload"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>File upload - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">File upload</h1>
+<p class="govuk-body">Help users select and upload a file.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default file upload</h3>
+<GovUkFileUpload Id="file-upload-1" Name="file-upload-1" Label="Upload a file" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">File upload with hint</h3>
+<GovUkFileUpload Id="file-upload-2" Name="file-upload-2" Label="Upload your photo" Hint="Your photo may be in your Pictures, Photos, Downloads or Desktop folder. Or in an app like iPhoto." />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">File upload with error</h3>
+<GovUkFileUpload Id="file-upload-3" Name="file-upload-3" Label="Upload a file" HasError="true" ErrorMessage="The selected file must be smaller than 2MB" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">File upload accepting specific file types</h3>
+<GovUkFileUpload Id="file-upload-4" Name="file-upload-4" Label="Upload a document" Hint="Upload a PDF, Word document, or image file" Accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Multiple file upload</h3>
+<GovUkFileUpload Id="file-upload-5" Name="file-upload-5" Label="Upload supporting documents" Hint="You can select multiple files" Multiple="true" />

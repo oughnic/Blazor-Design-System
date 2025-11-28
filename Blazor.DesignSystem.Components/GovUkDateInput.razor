@@ -1,0 +1,207 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-form-group @(HasError ? "govuk-form-group--error" : "") @CssClass">
+    <fieldset class="govuk-fieldset" aria-describedby="@GetAriaDescribedBy()" role="group">
+        @if (!string.IsNullOrWhiteSpace(Legend))
+        {
+            <legend class="govuk-fieldset__legend @LegendCssClass">
+                @if (IsPageHeading)
+                {
+                    <h1 class="govuk-fieldset__heading">
+                        @Legend
+                    </h1>
+                }
+                else
+                {
+                    @Legend
+                }
+            </legend>
+        }
+        @if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            <div id="@(Id)-hint" class="govuk-hint">
+                @Hint
+            </div>
+        }
+        @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <p id="@(Id)-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            </p>
+        }
+        <div class="govuk-date-input" id="@Id">
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="@(Id)-day">
+                        Day
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasError ? "govuk-input--error" : "")" 
+                           id="@(Id)-day" 
+                           name="@(Name)-day" 
+                           type="text"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="@Day"
+                           @oninput="HandleDayInput">
+                </div>
+            </div>
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="@(Id)-month">
+                        Month
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasError ? "govuk-input--error" : "")" 
+                           id="@(Id)-month" 
+                           name="@(Name)-month" 
+                           type="text"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="@Month"
+                           @oninput="HandleMonthInput">
+                </div>
+            </div>
+            <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="@(Id)-year">
+                        Year
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4 @(HasError ? "govuk-input--error" : "")" 
+                           id="@(Id)-year" 
+                           name="@(Name)-year" 
+                           type="text"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="@Year"
+                           @oninput="HandleYearInput">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@code {
+    /// <summary>
+    /// The unique identifier for the date input.
+    /// </summary>
+    [Parameter]
+    public string Id { get; set; } = $"date-input-{Guid.NewGuid():N}";
+
+    /// <summary>
+    /// The name attribute prefix for the date inputs.
+    /// </summary>
+    [Parameter]
+    public string? Name { get; set; }
+
+    /// <summary>
+    /// The legend text for the fieldset.
+    /// </summary>
+    [Parameter]
+    public string? Legend { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the legend.
+    /// </summary>
+    [Parameter]
+    public string? LegendCssClass { get; set; }
+
+    /// <summary>
+    /// Whether the legend should be styled as a page heading.
+    /// </summary>
+    [Parameter]
+    public bool IsPageHeading { get; set; }
+
+    /// <summary>
+    /// Hint text to display below the legend.
+    /// </summary>
+    [Parameter]
+    public string? Hint { get; set; }
+
+    /// <summary>
+    /// The day value.
+    /// </summary>
+    [Parameter]
+    public string? Day { get; set; }
+
+    /// <summary>
+    /// Callback for when the day changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> DayChanged { get; set; }
+
+    /// <summary>
+    /// The month value.
+    /// </summary>
+    [Parameter]
+    public string? Month { get; set; }
+
+    /// <summary>
+    /// Callback for when the month changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> MonthChanged { get; set; }
+
+    /// <summary>
+    /// The year value.
+    /// </summary>
+    [Parameter]
+    public string? Year { get; set; }
+
+    /// <summary>
+    /// Callback for when the year changes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<string?> YearChanged { get; set; }
+
+    /// <summary>
+    /// Whether the field has an error.
+    /// </summary>
+    [Parameter]
+    public bool HasError { get; set; }
+
+    /// <summary>
+    /// The error message to display.
+    /// </summary>
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes to apply to the form group.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    private async Task HandleDayInput(ChangeEventArgs e)
+    {
+        Day = e.Value?.ToString();
+        await DayChanged.InvokeAsync(Day);
+    }
+
+    private async Task HandleMonthInput(ChangeEventArgs e)
+    {
+        Month = e.Value?.ToString();
+        await MonthChanged.InvokeAsync(Month);
+    }
+
+    private async Task HandleYearInput(ChangeEventArgs e)
+    {
+        Year = e.Value?.ToString();
+        await YearChanged.InvokeAsync(Year);
+    }
+
+    private string? GetAriaDescribedBy()
+    {
+        var parts = new List<string>();
+        
+        if (!string.IsNullOrWhiteSpace(Hint))
+        {
+            parts.Add($"{Id}-hint");
+        }
+        
+        if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            parts.Add($"{Id}-error");
+        }
+        
+        return parts.Count > 0 ? string.Join(" ", parts) : null;
+    }
+}

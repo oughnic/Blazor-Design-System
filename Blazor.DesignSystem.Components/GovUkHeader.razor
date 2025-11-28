@@ -1,0 +1,106 @@
+@namespace Blazor.DesignSystem.Components
+
+<header class="govuk-header @CssClass" role="banner" data-module="govuk-header" @attributes="AdditionalAttributes">
+    <div class="govuk-header__container @ContainerClass">
+        <div class="govuk-header__logo">
+            <a href="@HomepageUrl" class="govuk-header__link govuk-header__link--homepage">
+                @if (!string.IsNullOrWhiteSpace(LogoContent))
+                {
+                    @((MarkupString)LogoContent)
+                }
+                else
+                {
+                    <span class="govuk-header__logotype">
+                        <span class="govuk-header__logotype-text">
+                            @OrganisationName
+                        </span>
+                    </span>
+                }
+                @if (!string.IsNullOrWhiteSpace(ProductName))
+                {
+                    <span class="govuk-header__product-name">
+                        @ProductName
+                    </span>
+                }
+            </a>
+        </div>
+        @if (Navigation != null)
+        {
+            <div class="govuk-header__content">
+                <nav aria-label="@NavigationLabel" class="govuk-header__navigation">
+                    @if (ShowMenuButton)
+                    {
+                        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu" hidden>
+                            Menu
+                        </button>
+                    }
+                    <ul id="navigation" class="govuk-header__navigation-list">
+                        @Navigation
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</header>
+
+@code {
+    /// <summary>
+    /// The URL for the homepage link. Defaults to "/".
+    /// </summary>
+    [Parameter]
+    public string HomepageUrl { get; set; } = "/";
+
+    /// <summary>
+    /// The organisation name. Defaults to "GOV.UK".
+    /// </summary>
+    [Parameter]
+    public string OrganisationName { get; set; } = "GOV.UK";
+
+    /// <summary>
+    /// The product name (displayed after the logo).
+    /// </summary>
+    [Parameter]
+    public string? ProductName { get; set; }
+
+    /// <summary>
+    /// Custom logo content (HTML markup).
+    /// </summary>
+    [Parameter]
+    public string? LogoContent { get; set; }
+
+    /// <summary>
+    /// The navigation content (should contain GovUkHeaderNavItem components).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Navigation { get; set; }
+
+    /// <summary>
+    /// The aria-label for the navigation. Defaults to "Menu".
+    /// </summary>
+    [Parameter]
+    public string NavigationLabel { get; set; } = "Menu";
+
+    /// <summary>
+    /// Whether to show the mobile menu button.
+    /// </summary>
+    [Parameter]
+    public bool ShowMenuButton { get; set; } = true;
+
+    /// <summary>
+    /// The container CSS class. Defaults to "govuk-width-container".
+    /// </summary>
+    [Parameter]
+    public string ContainerClass { get; set; } = "govuk-width-container";
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

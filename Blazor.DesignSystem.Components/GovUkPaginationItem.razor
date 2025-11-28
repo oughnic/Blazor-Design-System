@@ -1,0 +1,51 @@
+@namespace Blazor.DesignSystem.Components
+
+@if (IsEllipsis)
+{
+    <li class="govuk-pagination__item govuk-pagination__item--ellipses">
+        &ctdot;
+    </li>
+}
+else
+{
+    <li class="govuk-pagination__item @(IsCurrent ? "govuk-pagination__item--current" : "")">
+        @if (IsCurrent)
+        {
+            <span class="govuk-pagination__link" aria-current="page" aria-label="Page @Number">
+                @Number
+            </span>
+        }
+        else
+        {
+            <a class="govuk-pagination__link" href="@Href" aria-label="Page @Number">
+                @Number
+            </a>
+        }
+    </li>
+}
+
+@code {
+    /// <summary>
+    /// The page number.
+    /// </summary>
+    [Parameter]
+    public int Number { get; set; }
+
+    /// <summary>
+    /// The URL for the page.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>
+    /// Whether this is the current page.
+    /// </summary>
+    [Parameter]
+    public bool IsCurrent { get; set; }
+
+    /// <summary>
+    /// Whether to render as an ellipsis.
+    /// </summary>
+    [Parameter]
+    public bool IsEllipsis { get; set; }
+}

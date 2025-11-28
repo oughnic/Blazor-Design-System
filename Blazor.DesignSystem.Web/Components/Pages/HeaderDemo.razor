@@ -1,0 +1,30 @@
+@page "/components/header"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Header - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Header</h1>
+<p class="govuk-body">The GOV.UK header shows users that they are on GOV.UK and which service they are using.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default header</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkHeader />
+</div>
+
+<h3 class="govuk-heading-m">Header with product name</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkHeader ProductName="Service name" />
+</div>
+
+<h3 class="govuk-heading-m">Header with navigation</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkHeader ProductName="Service name">
+        <Navigation>
+            <GovUkHeaderNavItem Href="#" Text="Navigation item 1" />
+            <GovUkHeaderNavItem Href="#" Text="Navigation item 2" />
+            <GovUkHeaderNavItem Href="#" Text="Navigation item 3" IsActive="true" />
+        </Navigation>
+    </GovUkHeader>
+</div>

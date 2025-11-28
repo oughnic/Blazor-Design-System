@@ -1,0 +1,25 @@
+@page "/components/textarea"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Textarea - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Textarea</h1>
+<p class="govuk-body">Use the textarea component when you need to let users enter an amount of text that's longer than a single line.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default textarea</h3>
+<GovUkTextarea Id="more-detail" Name="more-detail" Label="Can you provide more detail?" Hint="Do not include personal or financial information, like your National Insurance number or credit card details." @bind-Value="textValue1" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Textarea with error</h3>
+<GovUkTextarea Id="with-error" Name="with-error" Label="Can you provide more detail?" HasError="true" ErrorMessage="Enter more detail" @bind-Value="textValue2" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Textarea with custom rows</h3>
+<GovUkTextarea Id="custom-rows" Name="custom-rows" Label="Describe the issue" Rows="10" @bind-Value="textValue3" />
+
+@code {
+    private string? textValue1;
+    private string? textValue2;
+    private string? textValue3;
+}

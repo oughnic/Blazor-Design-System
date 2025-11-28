@@ -1,0 +1,68 @@
+@page "/components/radios"
+@rendermode InteractiveServer
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Radios - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Radios</h1>
+<p class="govuk-body">Use the radios component when users can only select one option from a list.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default radios</h3>
+<GovUkRadios Name="where-live" Legend="Where do you live?" LegendCssClass="govuk-fieldset__legend--l" @bind-SelectedValue="whereLive">
+    <GovUkRadioItem Value="england" Label="England" />
+    <GovUkRadioItem Value="scotland" Label="Scotland" />
+    <GovUkRadioItem Value="wales" Label="Wales" />
+    <GovUkRadioItem Value="northern-ireland" Label="Northern Ireland" />
+</GovUkRadios>
+<p class="govuk-body govuk-!-margin-top-2">Selected: @whereLive</p>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Radios with hints</h3>
+<GovUkRadios Name="sign-in" Legend="How do you want to sign in?" Hint="Choose one of the following options" LegendCssClass="govuk-fieldset__legend--l" @bind-SelectedValue="signIn">
+    <GovUkRadioItem Value="gateway" Label="Sign in with Government Gateway" Hint="You'll have a user ID if you've registered for Self Assessment or filed a tax return online before." />
+    <GovUkRadioItem Value="verify" Label="Sign in with GOV.UK Verify" Hint="You'll have an account if you've already proved your identity with either Barclays, CitizenSafe, Digidentity, Experian, Post Office, Royal Mail or SecureIdentity." />
+</GovUkRadios>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Inline radios</h3>
+<GovUkRadios Name="changed-name" Legend="Have you changed your name?" LegendCssClass="govuk-fieldset__legend--l" IsInline="true" @bind-SelectedValue="changedName">
+    <GovUkRadioItem Value="yes" Label="Yes" />
+    <GovUkRadioItem Value="no" Label="No" />
+</GovUkRadios>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Radios with error</h3>
+<GovUkRadios Name="contact" Legend="How would you prefer to be contacted?" HasError="true" ErrorMessage="Select how you would prefer to be contacted" @bind-SelectedValue="contact">
+    <GovUkRadioItem Value="email" Label="Email" />
+    <GovUkRadioItem Value="phone" Label="Phone" />
+    <GovUkRadioItem Value="text" Label="Text message" />
+</GovUkRadios>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Radios with conditional content</h3>
+<GovUkRadios Name="contact-method" Legend="How would you prefer to be contacted?" LegendCssClass="govuk-fieldset__legend--l" @bind-SelectedValue="contactMethod">
+    <GovUkRadioItem Value="email" Label="Email" HasConditional="true">
+        <ConditionalContent>
+            <GovUkInput Id="contact-email" Name="contact-email" Label="Email address" Type="email" @bind-Value="contactEmail" />
+        </ConditionalContent>
+    </GovUkRadioItem>
+    <GovUkRadioItem Value="phone" Label="Phone" HasConditional="true">
+        <ConditionalContent>
+            <GovUkInput Id="contact-phone" Name="contact-phone" Label="Phone number" Type="tel" @bind-Value="contactPhone" />
+        </ConditionalContent>
+    </GovUkRadioItem>
+    <GovUkRadioItem Value="text" Label="Text message" HasConditional="true">
+        <ConditionalContent>
+            <GovUkInput Id="contact-text" Name="contact-text" Label="Mobile phone number" Type="tel" @bind-Value="contactText" />
+        </ConditionalContent>
+    </GovUkRadioItem>
+</GovUkRadios>
+
+@code {
+    private string? whereLive;
+    private string? signIn;
+    private string? changedName;
+    private string? contact;
+    private string? contactMethod;
+    private string? contactEmail;
+    private string? contactPhone;
+    private string? contactText;
+}

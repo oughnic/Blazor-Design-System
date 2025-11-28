@@ -1,0 +1,29 @@
+@page "/components/skip-link"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Skip link - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Skip link</h1>
+<p class="govuk-body">Use the skip link component to help keyboard-only users skip to the main content on a page.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">All GOV.UK pages must have a skip link. This is already included in the page template, but you may want to use it on its own for custom implementations.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default skip link</h3>
+<p class="govuk-body">The skip link appears when it receives focus (press Tab to see it):</p>
+<div style="position: relative; background-color: #f3f2f1; padding: 20px; margin-bottom: 20px;">
+    <GovUkSkipLink />
+    <p class="govuk-body">Tab into this area to see the skip link appear.</p>
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Skip link with custom text and target</h3>
+<div style="position: relative; background-color: #f3f2f1; padding: 20px;">
+    <GovUkSkipLink Href="#custom-content" Text="Skip to results" />
+    <p class="govuk-body">Tab into this area to see the custom skip link.</p>
+</div>
+
+<div id="custom-content" tabindex="-1" class="govuk-!-margin-top-6">
+    <p class="govuk-body">This is the target content for the custom skip link.</p>
+</div>

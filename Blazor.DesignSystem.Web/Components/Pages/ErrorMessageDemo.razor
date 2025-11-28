@@ -1,0 +1,18 @@
+@page "/components/error-message"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Error message - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Error message</h1>
+<p class="govuk-body">Follow the validation pattern and show an error message when there is a validation error. In the error message explain what went wrong and how to fix it.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default error message</h3>
+<GovUkErrorMessage>Enter your full name</GovUkErrorMessage>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Error message with ID</h3>
+<GovUkErrorMessage Id="date-error">The date your passport was issued must be in the past</GovUkErrorMessage>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Error message in context (with input)</h3>
+<GovUkInput Id="full-name" Name="full-name" Label="Full name" HasError="true" ErrorMessage="Enter your full name" />

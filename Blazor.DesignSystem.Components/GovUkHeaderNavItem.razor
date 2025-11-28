@@ -1,0 +1,54 @@
+@namespace Blazor.DesignSystem.Components
+
+@{
+    var itemClass = "govuk-header__navigation-item";
+    if (IsActive)
+    {
+        itemClass += " govuk-header__navigation-item--active";
+    }
+}
+
+<li class="@itemClass">
+    <a class="govuk-header__link" href="@Href" @attributes="AdditionalAttributes">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @Text
+        }
+    </a>
+</li>
+
+@code {
+    /// <summary>
+    /// The URL for the navigation item.
+    /// </summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>
+    /// The navigation item text.
+    /// </summary>
+    [Parameter]
+    public string? Text { get; set; }
+
+    /// <summary>
+    /// The navigation item content (takes precedence over Text).
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Whether this is the active/current page.
+    /// </summary>
+    [Parameter]
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply to the link.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

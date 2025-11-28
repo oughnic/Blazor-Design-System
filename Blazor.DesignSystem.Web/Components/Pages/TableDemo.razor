@@ -1,0 +1,65 @@
+@page "/components/table"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Table - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Table</h1>
+<p class="govuk-body">Use the table component to make information easier to compare and scan for users.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default table</h3>
+<GovUkTable Caption="Dates and amounts" CaptionCssClass="govuk-table__caption--m">
+    <Head>
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Date</th>
+            <th scope="col" class="govuk-table__header">Amount</th>
+        </tr>
+    </Head>
+    <ChildContent>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">First 6 weeks</th>
+            <td class="govuk-table__cell">£109.80 per week</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Next 33 weeks</th>
+            <td class="govuk-table__cell">£109.80 per week</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">Total estimated pay</th>
+            <td class="govuk-table__cell">£4,282.20</td>
+        </tr>
+    </ChildContent>
+</GovUkTable>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Table with numeric data</h3>
+<GovUkTable Caption="Monthly statistics" CaptionCssClass="govuk-table__caption--m">
+    <Head>
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Month</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Applications</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Approved</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Rejected</th>
+        </tr>
+    </Head>
+    <ChildContent>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">January</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">145</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">132</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">13</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">February</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">132</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">121</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">11</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">March</th>
+            <td class="govuk-table__cell govuk-table__cell--numeric">170</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">158</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">12</td>
+        </tr>
+    </ChildContent>
+</GovUkTable>

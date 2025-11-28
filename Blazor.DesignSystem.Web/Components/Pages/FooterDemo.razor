@@ -1,0 +1,37 @@
+@page "/components/footer"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Footer - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Footer</h1>
+<p class="govuk-body">The footer provides copyright, licensing and other information about your service and department.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default footer</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkFooter LicenceText="All content is available under the &lt;a class='govuk-footer__link' href='https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'&gt;Open Government Licence v3.0&lt;/a&gt;, except where otherwise stated" CopyrightText="© Crown copyright" CopyrightUrl="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/" />
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Footer with meta links</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkFooter LicenceText="All content is available under the &lt;a class='govuk-footer__link' href='https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'&gt;Open Government Licence v3.0&lt;/a&gt;, except where otherwise stated">
+        <MetaLinks>
+            <GovUkFooterMetaLink Href="#" Text="Help" />
+            <GovUkFooterMetaLink Href="#" Text="Cookies" />
+            <GovUkFooterMetaLink Href="#" Text="Contact" />
+            <GovUkFooterMetaLink Href="#" Text="Terms and conditions" />
+        </MetaLinks>
+    </GovUkFooter>
+</div>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Footer with custom content</h3>
+<div style="margin-bottom: 30px;">
+    <GovUkFooter>
+        <CustomContent>
+            <span class="govuk-footer__licence-description">
+                Built by the Government Digital Service
+            </span>
+        </CustomContent>
+    </GovUkFooter>
+</div>

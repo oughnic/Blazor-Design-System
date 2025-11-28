@@ -1,0 +1,68 @@
+@namespace Blazor.DesignSystem.Components
+
+<div class="govuk-error-summary @CssClass" data-module="govuk-error-summary" @attributes="AdditionalAttributes">
+    <div role="alert">
+        <h2 class="govuk-error-summary__title">
+            @Title
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                @foreach (var error in Errors)
+                {
+                    <li>
+                        @if (!string.IsNullOrWhiteSpace(error.FieldId))
+                        {
+                            <a href="#@error.FieldId">@error.Message</a>
+                        }
+                        else
+                        {
+                            @error.Message
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// The error summary title. Defaults to "There is a problem".
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "There is a problem";
+
+    /// <summary>
+    /// The list of errors to display.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<ErrorItem> Errors { get; set; } = Enumerable.Empty<ErrorItem>();
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Additional HTML attributes to apply.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    /// <summary>
+    /// Represents an error item in the error summary.
+    /// </summary>
+    public class ErrorItem
+    {
+        /// <summary>
+        /// The error message.
+        /// </summary>
+        public string Message { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The ID of the field with the error (for linking).
+        /// </summary>
+        public string? FieldId { get; set; }
+    }
+}
