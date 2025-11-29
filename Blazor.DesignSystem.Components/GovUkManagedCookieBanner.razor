@@ -38,9 +38,11 @@
                 else
                 {
                     <p class="govuk-body">
-                        You've @(_acceptedCookies ? "accepted" : "rejected") analytics cookies. You can
-                        <a class="govuk-link" href="@(string.IsNullOrWhiteSpace(ViewCookiesUrl) ? "#" : ViewCookiesUrl)">change your cookie settings</a>
-                        at any time.
+                        You've @(_acceptedCookies ? "accepted" : "rejected") analytics cookies.
+                        @if (!string.IsNullOrWhiteSpace(ViewCookiesUrl))
+                        {
+                            <text> You can <a class="govuk-link" href="@ViewCookiesUrl">change your cookie settings</a> at any time.</text>
+                        }
                     </p>
                 }
             </ChildContent>

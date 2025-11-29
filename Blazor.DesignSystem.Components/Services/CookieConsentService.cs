@@ -32,6 +32,7 @@ public class CookieConsentService : ICookieConsentService
         }
         catch (JSException)
         {
+            // Cookie access may fail during prerendering or if JS is unavailable - treat as no consent
             return false;
         }
     }
@@ -47,12 +48,18 @@ public class CookieConsentService : ICookieConsentService
                 return false;
             }
 
-            // Parse the JSON value
-            var consent = await _jsRuntime.InvokeAsync<CookiePolicy>("JSON.parse", value);
+            // Parse the JSON value using System.Text.Json for better error handling
+            var consent = System.Text.Json.JsonSerializer.Deserialize<CookiePolicy>(value);
             return consent?.Analytics ?? false;
         }
         catch (JSException)
         {
+            // Cookie access may fail during prerendering or if JS is unavailable - treat as no consent
+            return false;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            // Invalid JSON in cookie - treat as no consent
             return false;
         }
     }
@@ -79,7 +86,8 @@ public class CookieConsentService : ICookieConsentService
         }
         catch (JSException)
         {
-            // Log or handle error as appropriate
+            // Cookie setting may fail during prerendering or if JS is unavailable
+            // This is a non-critical failure - user can try again
         }
     }
 
@@ -93,7 +101,8 @@ public class CookieConsentService : ICookieConsentService
         }
         catch (JSException)
         {
-            // Log or handle error as appropriate
+            // Cookie deletion may fail during prerendering or if JS is unavailable
+            // This is a non-critical failure - user can try again
         }
     }
 
