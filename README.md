@@ -1,5 +1,9 @@
 # Blazor GOV.UK Design System
 
+[![NuGet Version](https://img.shields.io/nuget/v/Blazor.DesignSystem.Components)](https://www.nuget.org/packages/Blazor.DesignSystem.Components)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Blazor.DesignSystem.Components)](https://www.nuget.org/packages/Blazor.DesignSystem.Components)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > ⚠️ **ALPHA VERSION** - This project is in early development. APIs may change, and components may have bugs or incomplete features. Use at your own risk in production environments.
 
 A Blazor component library that implements the [GOV.UK Design System](https://design-system.service.gov.uk/) for building government-style services using .NET Blazor.
@@ -37,25 +41,39 @@ The original GOV.UK Design System and govuk-frontend are licensed under the [MIT
 
 ### Installation
 
-1. Add a reference to the component library:
-
-```xml
-<ProjectReference Include="..\Blazor.DesignSystem.Components\Blazor.DesignSystem.Components.csproj" />
-```
-
-Or once published to NuGet:
+Install the NuGet package:
 
 ```bash
 dotnet add package Blazor.DesignSystem.Components
 ```
 
-2. Add the GOV.UK Frontend CSS to your `App.razor` or `_Host.cshtml`:
+Or via Package Manager Console:
+
+```powershell
+Install-Package Blazor.DesignSystem.Components
+```
+
+Or add directly to your project file:
+
+```xml
+<PackageReference Include="Blazor.DesignSystem.Components" Version="1.0.0-alpha.1" />
+```
+
+For local development, you can also add a project reference:
+
+```xml
+<ProjectReference Include="..\Blazor.DesignSystem.Components\Blazor.DesignSystem.Components.csproj" />
+```
+
+### Setup
+
+1. Add the GOV.UK Frontend CSS to your `App.razor` or `_Host.cshtml`:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend@5.4.0/dist/govuk/govuk-frontend.min.css">
 ```
 
-3. Add the namespace to your `_Imports.razor`:
+2. Add the namespace to your `_Imports.razor`:
 
 ```razor
 @using Blazor.DesignSystem.Components

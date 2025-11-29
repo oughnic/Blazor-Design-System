@@ -4,8 +4,31 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- NuGet Package Configuration -->
+    <PackageId>Blazor.DesignSystem.Components</PackageId>
+    <Version>1.0.0-alpha.1</Version>
+    <Authors>Blazor Design System Contributors</Authors>
+    <Company>Blazor Design System</Company>
+    <Description>A Blazor component library implementing the GOV.UK Design System. Provides 32 accessible, government-style UI components for building digital services with .NET Blazor. This is a derivative work based on the GOV.UK Design System and govuk-frontend.</Description>
+    <PackageTags>blazor;govuk;gov-uk;design-system;components;razor;ui;accessibility;wcag;government;aspnetcore</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/oughnic/Blazor-Design-System</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/oughnic/Blazor-Design-System</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Initial alpha release of the Blazor GOV.UK Design System components library.</PackageReleaseNotes>
+    <Copyright>Copyright (c) 2024 Blazor Design System Contributors</Copyright>
+    
+    <!-- Enable package generation -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
