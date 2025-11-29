@@ -78,3 +78,47 @@ window.GovUkDesignSystem.navigateToField = function (fieldId) {
 
     input.focus({ preventScroll: true });
 };
+
+/**
+ * Cookie management functions for cookie consent
+ */
+
+/**
+ * Get the value of a cookie
+ * @param {string} name - The name of the cookie
+ * @returns {string|null} The cookie value or null if not found
+ */
+window.GovUkDesignSystem.getCookie = function (name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+};
+
+/**
+ * Set a cookie with the specified name, value, and expiry
+ * @param {string} name - The name of the cookie
+ * @param {string} value - The value of the cookie
+ * @param {number} days - The number of days until the cookie expires
+ */
+window.GovUkDesignSystem.setCookie = function (name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax";
+};
+
+/**
+ * Delete a cookie by name
+ * @param {string} name - The name of the cookie to delete
+ */
+window.GovUkDesignSystem.deleteCookie = function (name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax';
+};

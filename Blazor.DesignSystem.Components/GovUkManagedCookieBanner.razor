@@ -1,0 +1,170 @@
+@namespace Blazor.DesignSystem.Components
+@using Blazor.DesignSystem.Components.Services
+@inject ICookieConsentService CookieConsentService
+
+<GovUkCookieBanner AriaLabel="@AriaLabel" IsHidden="@_isHidden" CssClass="@CssClass">
+    @if (_showConsentMessage)
+    {
+        <GovUkCookieBannerMessage Heading="@Heading">
+            <ChildContent>
+                @if (ConsentContent != null)
+                {
+                    @ConsentContent
+                }
+                else
+                {
+                    <p class="govuk-body">We use some essential cookies to make this service work.</p>
+                    <p class="govuk-body">We'd also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+                }
+            </ChildContent>
+            <Actions>
+                <GovUkButton Text="@AcceptButtonText" OnClick="OnAcceptCookiesAsync" />
+                <GovUkButton Text="@RejectButtonText" IsSecondary="true" OnClick="OnRejectCookiesAsync" />
+                @if (!string.IsNullOrWhiteSpace(ViewCookiesUrl))
+                {
+                    <a class="govuk-link" href="@ViewCookiesUrl">@ViewCookiesLinkText</a>
+                }
+            </Actions>
+        </GovUkCookieBannerMessage>
+    }
+    @if (_showConfirmationMessage)
+    {
+        <GovUkCookieBannerMessage>
+            <ChildContent>
+                @if (ConfirmationContent != null)
+                {
+                    @ConfirmationContent(_acceptedCookies)
+                }
+                else
+                {
+                    <p class="govuk-body">
+                        You've @(_acceptedCookies ? "accepted" : "rejected") analytics cookies. You can
+                        <a class="govuk-link" href="@(string.IsNullOrWhiteSpace(ViewCookiesUrl) ? "#" : ViewCookiesUrl)">change your cookie settings</a>
+                        at any time.
+                    </p>
+                }
+            </ChildContent>
+            <Actions>
+                <GovUkButton Text="@HideButtonText" OnClick="OnHideBannerAsync" />
+            </Actions>
+        </GovUkCookieBannerMessage>
+    }
+</GovUkCookieBanner>
+
+@code {
+    private bool _isHidden = true;
+    private bool _showConsentMessage = false;
+    private bool _showConfirmationMessage = false;
+    private bool _acceptedCookies = false;
+    private bool _initialized = false;
+
+    /// <summary>
+    /// The aria-label for the cookie banner.
+    /// </summary>
+    [Parameter]
+    public string AriaLabel { get; set; } = "Cookies on this service";
+
+    /// <summary>
+    /// The heading text for the consent message.
+    /// </summary>
+    [Parameter]
+    public string Heading { get; set; } = "Cookies on this service";
+
+    /// <summary>
+    /// The text for the accept button.
+    /// </summary>
+    [Parameter]
+    public string AcceptButtonText { get; set; } = "Accept analytics cookies";
+
+    /// <summary>
+    /// The text for the reject button.
+    /// </summary>
+    [Parameter]
+    public string RejectButtonText { get; set; } = "Reject analytics cookies";
+
+    /// <summary>
+    /// The text for the hide button.
+    /// </summary>
+    [Parameter]
+    public string HideButtonText { get; set; } = "Hide cookie message";
+
+    /// <summary>
+    /// The URL to the page with detailed cookie information.
+    /// </summary>
+    [Parameter]
+    public string? ViewCookiesUrl { get; set; }
+
+    /// <summary>
+    /// The text for the view cookies link.
+    /// </summary>
+    [Parameter]
+    public string ViewCookiesLinkText { get; set; } = "View cookies";
+
+    /// <summary>
+    /// Additional CSS classes to apply.
+    /// </summary>
+    [Parameter]
+    public string? CssClass { get; set; }
+
+    /// <summary>
+    /// Custom content for the consent message. If not provided, default text is used.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ConsentContent { get; set; }
+
+    /// <summary>
+    /// Custom content for the confirmation message. Receives a bool indicating if cookies were accepted.
+    /// If not provided, default text is used.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<bool>? ConfirmationContent { get; set; }
+
+    /// <summary>
+    /// Callback invoked when the user accepts cookies.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OnConsentChanged { get; set; }
+
+    /// <summary>
+    /// Initializes the component and checks for existing consent.
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_initialized)
+        {
+            _initialized = true;
+            var hasConsent = await CookieConsentService.HasConsentAsync();
+            if (!hasConsent)
+            {
+                _isHidden = false;
+                _showConsentMessage = true;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task OnAcceptCookiesAsync()
+    {
+        _acceptedCookies = true;
+        await CookieConsentService.SetConsentAsync(true);
+        _showConsentMessage = false;
+        _showConfirmationMessage = true;
+        await OnConsentChanged.InvokeAsync(true);
+    }
+
+    private async Task OnRejectCookiesAsync()
+    {
+        _acceptedCookies = false;
+        await CookieConsentService.SetConsentAsync(false);
+        _showConsentMessage = false;
+        _showConfirmationMessage = true;
+        await OnConsentChanged.InvokeAsync(false);
+    }
+
+    private Task OnHideBannerAsync()
+    {
+        _isHidden = true;
+        _showConfirmationMessage = false;
+        return Task.CompletedTask;
+    }
+}

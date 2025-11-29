@@ -1,4 +1,11 @@
 ﻿@inherits LayoutComponentBase
+@using Blazor.DesignSystem.Components
+
+<GovUkManagedCookieBanner 
+    @rendermode="InteractiveServer"
+    Heading="Cookies on Blazor Design System"
+    AriaLabel="Cookies on Blazor Design System"
+    ViewCookiesUrl="/components/cookie-banner" />
 
 <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
