@@ -42,7 +42,17 @@ Add the namespace to your `_Imports.razor`:
 @using Blazor.DesignSystem.Components
 ```
 
-### 3. Use the components
+### 3. (Optional) Register Cookie Consent Service
+
+If you want to use the `GovUkManagedCookieBanner` component, register the cookie consent service in `Program.cs`:
+
+```csharp
+using Blazor.DesignSystem.Components;
+
+builder.Services.AddGovUkCookieConsent();
+```
+
+### 4. Use the components
 
 ```razor
 @using Blazor.DesignSystem.Components
@@ -73,6 +83,45 @@ All 32 GOV.UK Design System components are implemented:
 - **Navigation**: Breadcrumbs, Pagination, Header, Back Link, Skip Link, Footer
 - **Content**: Accordion, Tabs, Details, Table, Tag, Panel, Warning Text, Inset Text, Notification Banner, Phase Banner, Cookie Banner
 - **Form Support**: Error Message, Error Summary, Fieldset, Hint, Label, Summary List, Task List
+
+## Managed Cookie Banner
+
+The `GovUkManagedCookieBanner` component provides a complete cookie consent solution with persistence. It requires the cookie consent service to be registered.
+
+### Setup
+
+1. Register the service in `Program.cs`:
+
+```csharp
+using Blazor.DesignSystem.Components;
+
+builder.Services.AddGovUkCookieConsent();
+```
+
+2. Add the component to your layout (e.g., `MainLayout.razor`):
+
+```razor
+@using Blazor.DesignSystem.Components
+
+<GovUkManagedCookieBanner 
+    @rendermode="InteractiveServer"
+    Heading="Cookies on My Service"
+    ViewCookiesUrl="/cookies" />
+```
+
+### Customization
+
+```razor
+<GovUkManagedCookieBanner 
+    Heading="Cookies on My Service"
+    AcceptButtonText="Yes, accept"
+    RejectButtonText="No, reject"
+    OnConsentChanged="@(accepted => HandleConsent(accepted))">
+    <ConsentContent>
+        <p class="govuk-body">Custom consent message...</p>
+    </ConsentContent>
+</GovUkManagedCookieBanner>
+```
 
 ## Render Modes
 

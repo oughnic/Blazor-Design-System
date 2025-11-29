@@ -1,11 +1,11 @@
 @namespace Blazor.DesignSystem.Components
 
-<div class="govuk-cookie-banner @CssClass" data-nosnippet role="region" aria-label="@AriaLabel">
-    @if (!IsHidden)
-    {
+@if (!IsHidden)
+{
+    <div class="govuk-cookie-banner @CssClass" data-nosnippet role="region" aria-label="@AriaLabel">
         @ChildContent
-    }
-</div>
+    </div>
+}
 
 @code {
     /// <summary>

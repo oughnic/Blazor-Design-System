@@ -1,3 +1,4 @@
+using Blazor.DesignSystem.Components;
 using Blazor.DesignSystem.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddGovUkCookieConsent();
 
 var app = builder.Build();
 
