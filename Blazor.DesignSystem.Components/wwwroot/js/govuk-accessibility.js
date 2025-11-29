@@ -33,7 +33,7 @@ window.GovUkDesignSystem.focusErrorSummary = function () {
  * @param {string} fieldId - The ID of the form field to navigate to
  */
 window.GovUkDesignSystem.navigateToField = function (fieldId) {
-    if (!fieldId) return;
+    if (!fieldId || typeof fieldId !== 'string') return;
 
     const input = document.getElementById(fieldId);
     if (!input) return;
@@ -65,9 +65,10 @@ window.GovUkDesignSystem.navigateToField = function (fieldId) {
         }
     }
 
-    // Fall back to label
+    // Fall back to label - use the already validated input element to find its label
     if (!legendOrLabel) {
-        legendOrLabel = document.querySelector('label[for="' + fieldId + '"]') || input.closest('label');
+        const labelElement = document.querySelector('label[for="' + CSS.escape(fieldId) + '"]');
+        legendOrLabel = labelElement || input.closest('label');
     }
 
     // Scroll legend/label into view, then focus input
