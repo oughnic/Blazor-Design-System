@@ -23,9 +23,9 @@ A comprehensive unit test suite has been created using **bUnit** testing framewo
 | Category | Test Count | Description |
 |----------|------------|-------------|
 | Form Components | 208 | Button, Input, Textarea, Select, Checkboxes, Radios, DateInput, CharacterCount |
-| Interactive Components | 58 | Accordion, Tabs, Details |
-| Navigation Components | 56 | Breadcrumbs, Pagination, Header, BackLink, SkipLink |
-| Content Components | 59 | Table, Tag, Panel, WarningText, InsetText, ErrorSummary, NotificationBanner |
+| Interactive Components | 42 | Accordion, Tabs, Details |
+| Navigation Components | 61 | Breadcrumbs, Pagination, Header, BackLink, SkipLink |
+| Content Components | 70 | Table, Tag, Panel, WarningText, InsetText, ErrorSummary, NotificationBanner |
 
 ### Test Coverage Details
 
