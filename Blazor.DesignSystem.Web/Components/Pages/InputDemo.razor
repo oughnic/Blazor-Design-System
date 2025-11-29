@@ -1,6 +1,7 @@
 @page "/components/input"
 @rendermode InteractiveServer
 @using Blazor.DesignSystem.Components
+@using Blazor.DesignSystem.Components.Validation
 
 <PageTitle>Input - GOV.UK Design System</PageTitle>
 
@@ -27,6 +28,112 @@
 <h3 class="govuk-heading-m govuk-!-margin-top-6">Input with prefix and suffix</h3>
 <p class="govuk-body">For inputs with prefixes or suffixes (like £ or kg), you would need to wrap the input with additional markup using the standard HTML approach.</p>
 
+<h2 class="govuk-heading-l govuk-!-margin-top-9">Input validation examples</h2>
+<p class="govuk-body">These examples demonstrate proper input validation for common patterns.</p>
+
+<h3 class="govuk-heading-m">Email validation</h3>
+<p class="govuk-body">Try entering an invalid email like <code>fred@@example.com</code> or <code>test@test</code>.</p>
+
+@if (showEmailErrors && !string.IsNullOrEmpty(emailErrorMessage))
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@emailErrorItems" />
+}
+
+<form @onsubmit="HandleEmailSubmit" @onsubmit:preventDefault>
+    <GovUkInput 
+        Id="validated-email" 
+        Name="validated-email" 
+        Label="Email address"
+        Type="email"
+        Hint="For example, name@example.com"
+        HasError="@hasEmailError"
+        ErrorMessage="@emailErrorMessage"
+        Autocomplete="email"
+        @bind-Value="validatedEmail" />
+
+    <GovUkButton Type="submit">Validate email</GovUkButton>
+</form>
+
+@if (emailSuccess)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Valid email</h2>
+        <div class="govuk-panel__body">
+            @validatedEmail is a valid email address
+        </div>
+    </div>
+}
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">National Insurance number validation</h3>
+<p class="govuk-body">Enter a National Insurance number in the format QQ 12 34 56 C.</p>
+
+@if (showNinoErrors && !string.IsNullOrEmpty(ninoErrorMessage))
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@ninoErrorItems" />
+}
+
+<form @onsubmit="HandleNinoSubmit" @onsubmit:preventDefault>
+    <GovUkInput 
+        Id="validated-nino" 
+        Name="validated-nino" 
+        Label="National Insurance number"
+        Hint="It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
+        Width="10"
+        HasError="@hasNinoError"
+        ErrorMessage="@ninoErrorMessage"
+        @bind-Value="validatedNino" />
+
+    <GovUkButton Type="submit">Validate NI number</GovUkButton>
+</form>
+
+@if (ninoSuccess)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Valid National Insurance number</h2>
+        <div class="govuk-panel__body">
+            @validatedNino is a valid National Insurance number
+        </div>
+    </div>
+}
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">UK Postcode validation</h3>
+
+@if (showPostcodeErrors && !string.IsNullOrEmpty(postcodeErrorMessage))
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@postcodeErrorItems" />
+}
+
+<form @onsubmit="HandlePostcodeSubmit" @onsubmit:preventDefault>
+    <GovUkInput 
+        Id="validated-postcode" 
+        Name="validated-postcode" 
+        Label="Postcode"
+        Hint="For example, SW1A 1AA"
+        Width="10"
+        HasError="@hasPostcodeError"
+        ErrorMessage="@postcodeErrorMessage"
+        Autocomplete="postal-code"
+        @bind-Value="validatedPostcode" />
+
+    <GovUkButton Type="submit">Validate postcode</GovUkButton>
+</form>
+
+@if (postcodeSuccess)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Valid postcode</h2>
+        <div class="govuk-panel__body">
+            @validatedPostcode is a valid UK postcode
+        </div>
+    </div>
+}
+
 @code {
     private string? eventName;
     private string? niNumber;
@@ -34,4 +141,109 @@
     private string? width20;
     private string? width10;
     private string? width5;
+
+    // Email validation
+    private string? validatedEmail;
+    private bool hasEmailError = false;
+    private string? emailErrorMessage;
+    private bool showEmailErrors = false;
+    private bool emailSuccess = false;
+    private List<GovUkErrorSummary.ErrorItem> emailErrorItems = new();
+
+    // NINO validation
+    private string? validatedNino;
+    private bool hasNinoError = false;
+    private string? ninoErrorMessage;
+    private bool showNinoErrors = false;
+    private bool ninoSuccess = false;
+    private List<GovUkErrorSummary.ErrorItem> ninoErrorItems = new();
+
+    // Postcode validation
+    private string? validatedPostcode;
+    private bool hasPostcodeError = false;
+    private string? postcodeErrorMessage;
+    private bool showPostcodeErrors = false;
+    private bool postcodeSuccess = false;
+    private List<GovUkErrorSummary.ErrorItem> postcodeErrorItems = new();
+
+    private void HandleEmailSubmit()
+    {
+        emailSuccess = false;
+        showEmailErrors = false;
+        hasEmailError = false;
+        emailErrorMessage = null;
+        emailErrorItems.Clear();
+
+        var result = FormValidationService.ValidateEmail(validatedEmail);
+
+        if (!result.IsValid)
+        {
+            hasEmailError = true;
+            emailErrorMessage = result.ErrorMessage;
+            showEmailErrors = true;
+            emailErrorItems.Add(new GovUkErrorSummary.ErrorItem
+            {
+                Message = emailErrorMessage ?? "Enter a valid email address",
+                FieldId = "validated-email"
+            });
+        }
+        else
+        {
+            emailSuccess = true;
+        }
+    }
+
+    private void HandleNinoSubmit()
+    {
+        ninoSuccess = false;
+        showNinoErrors = false;
+        hasNinoError = false;
+        ninoErrorMessage = null;
+        ninoErrorItems.Clear();
+
+        var result = FormValidationService.ValidateNationalInsuranceNumber(validatedNino);
+
+        if (!result.IsValid)
+        {
+            hasNinoError = true;
+            ninoErrorMessage = result.ErrorMessage;
+            showNinoErrors = true;
+            ninoErrorItems.Add(new GovUkErrorSummary.ErrorItem
+            {
+                Message = ninoErrorMessage ?? "Enter a valid National Insurance number",
+                FieldId = "validated-nino"
+            });
+        }
+        else
+        {
+            ninoSuccess = true;
+        }
+    }
+
+    private void HandlePostcodeSubmit()
+    {
+        postcodeSuccess = false;
+        showPostcodeErrors = false;
+        hasPostcodeError = false;
+        postcodeErrorMessage = null;
+        postcodeErrorItems.Clear();
+
+        var result = FormValidationService.ValidateUkPostcode(validatedPostcode);
+
+        if (!result.IsValid)
+        {
+            hasPostcodeError = true;
+            postcodeErrorMessage = result.ErrorMessage;
+            showPostcodeErrors = true;
+            postcodeErrorItems.Add(new GovUkErrorSummary.ErrorItem
+            {
+                Message = postcodeErrorMessage ?? "Enter a valid postcode",
+                FieldId = "validated-postcode"
+            });
+        }
+        else
+        {
+            postcodeSuccess = true;
+        }
+    }
 }

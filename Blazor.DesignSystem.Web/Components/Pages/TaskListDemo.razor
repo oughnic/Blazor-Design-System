@@ -1,0 +1,137 @@
+@page "/components/task-list"
+@using Blazor.DesignSystem.Components
+
+<PageTitle>Task list - GOV.UK Design System</PageTitle>
+
+<h1 class="govuk-heading-xl">Task list</h1>
+<p class="govuk-body">The task list component displays all the tasks a user needs to do, and allows users to easily identify which ones are done and which they still need to do.</p>
+
+<h2 class="govuk-heading-l">When to use this component</h2>
+<p class="govuk-body">Use the task list component to give users an overview of the tasks they need to complete as part of a longer transaction.</p>
+
+<h2 class="govuk-heading-l">Examples</h2>
+
+<h3 class="govuk-heading-m">Default task list</h3>
+<GovUkTaskList Items="@basicTasks" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Task list with hints</h3>
+<GovUkTaskList Items="@tasksWithHints" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Task list with different statuses</h3>
+<GovUkTaskList Items="@tasksWithStatuses" />
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Task list for application process</h3>
+<h2 class="govuk-heading-l">Apply for a passport</h2>
+<GovUkTaskList Items="@passportTasks" IdPrefix="passport" />
+
+@code {
+    private List<GovUkTaskList.TaskListItem> basicTasks = new()
+    {
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Company information",
+            Href = "/company-information",
+            StatusText = "Completed"
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Contact details",
+            Href = "/contact-details",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Not started", Color = "blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Submit application",
+            StatusText = "Cannot start yet"
+        }
+    };
+
+    private List<GovUkTaskList.TaskListItem> tasksWithHints = new()
+    {
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Add your company details",
+            Hint = "Including company name and registration number",
+            Href = "/company-details",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Completed", Color = null }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Add your contact information",
+            Hint = "We'll use this to contact you about your application",
+            Href = "/contact-information",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "In progress", Color = "light-blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "List the directors",
+            Hint = "You must add all directors with their full legal names",
+            Href = "/directors",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Not started", Color = "blue" }
+        }
+    };
+
+    private List<GovUkTaskList.TaskListItem> tasksWithStatuses = new()
+    {
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Personal information",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Completed" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Employment history",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "In progress", Color = "light-blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Education",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Not started", Color = "blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "References",
+            StatusText = "Cannot start yet",
+            StatusCssClass = "govuk-task-list__status--cannot-start-yet"
+        }
+    };
+
+    private List<GovUkTaskList.TaskListItem> passportTasks = new()
+    {
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Check you're eligible",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Completed" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Get a digital photo",
+            Hint = "You'll need a recent photo that meets the passport photo rules",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Completed" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Fill in your details",
+            Hint = "Including your name, date of birth and address",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "In progress", Color = "light-blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Get someone to confirm your identity",
+            Hint = "This must be someone who has known you for at least 2 years",
+            Href = "#",
+            StatusTag = new GovUkTaskList.TaskListStatusTag { Text = "Not started", Color = "blue" }
+        },
+        new GovUkTaskList.TaskListItem
+        {
+            Title = "Pay and submit",
+            StatusText = "Cannot start yet"
+        }
+    };
+}

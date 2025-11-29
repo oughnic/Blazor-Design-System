@@ -16,7 +16,7 @@
     @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
     {
         <p id="@(Id)-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
         </p>
     }
     <input class="govuk-file-upload @(HasError ? "govuk-file-upload--error" : "") @InputCssClass" 
@@ -27,6 +27,7 @@
            accept="@Accept"
            multiple="@Multiple"
            aria-describedby="@GetAriaDescribedBy()"
+           aria-invalid="@(HasError ? "true" : null)"
            @onchange="HandleChange"
            @attributes="AdditionalAttributes">
 </div>
@@ -79,6 +80,12 @@
     /// </summary>
     [Parameter]
     public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// The file types to accept.

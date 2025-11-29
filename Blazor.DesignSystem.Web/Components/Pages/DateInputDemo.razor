@@ -1,6 +1,7 @@
 @page "/components/date-input"
 @rendermode InteractiveServer
 @using Blazor.DesignSystem.Components
+@using Blazor.DesignSystem.Components.Validation
 
 <PageTitle>Date input - GOV.UK Design System</PageTitle>
 
@@ -16,6 +17,91 @@
 <h3 class="govuk-heading-m govuk-!-margin-top-6">Date input with error</h3>
 <GovUkDateInput Id="dob-error" Name="dob-error" Legend="What is your date of birth?" LegendCssClass="govuk-fieldset__legend--l" IsPageHeading="true" Hint="For example, 31 3 1980" HasError="true" ErrorMessage="The date your passport was issued must be in the past" @bind-Day="day2" @bind-Month="month2" @bind-Year="year2" />
 
+<h2 class="govuk-heading-l govuk-!-margin-top-9">Date validation examples</h2>
+<p class="govuk-body">The date input component can validate dates to ensure they are real calendar dates. For example:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li><strong>31/11/2025</strong> is invalid - November only has 30 days</li>
+    <li><strong>29/02/2023</strong> is invalid - 2023 is not a leap year</li>
+    <li><strong>30/02/2024</strong> is invalid - February never has 30 days</li>
+</ul>
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Interactive date validation</h3>
+<p class="govuk-body">Try entering an invalid date like 31/11/2025 and clicking "Check date".</p>
+
+@if (showDateErrors && !string.IsNullOrEmpty(validatedDateErrorMessage))
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@dateErrorItems" />
+}
+
+<form @onsubmit="HandleDateSubmit" @onsubmit:preventDefault>
+    <GovUkDateInput 
+        Id="validated-date" 
+        Name="validated-date" 
+        Legend="Enter a date" 
+        LegendCssClass="govuk-fieldset__legend--m"
+        Hint="For example, 27 3 2007"
+        HasError="@hasValidatedDateError"
+        HasDayFieldError="@validatedDayError"
+        HasMonthFieldError="@validatedMonthError"
+        HasYearFieldError="@validatedYearError"
+        ErrorMessage="@validatedDateErrorMessage"
+        @bind-Day="validatedDay" 
+        @bind-Month="validatedMonth" 
+        @bind-Year="validatedYear" />
+
+    <GovUkButton Type="submit">Check date</GovUkButton>
+</form>
+
+@if (dateSuccess)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Valid date</h2>
+        <div class="govuk-panel__body">
+            @validatedDay/@validatedMonth/@validatedYear is a valid date
+        </div>
+    </div>
+}
+
+<h3 class="govuk-heading-m govuk-!-margin-top-6">Date of birth validation (must be in the past)</h3>
+
+@if (showDobErrors && !string.IsNullOrEmpty(dobErrorMessage))
+{
+    <GovUkErrorSummary 
+        Title="There is a problem"
+        Errors="@dobErrorItems" />
+}
+
+<form @onsubmit="HandleDobSubmit" @onsubmit:preventDefault>
+    <GovUkDateInput 
+        Id="dob-validated" 
+        Name="dob-validated" 
+        Legend="What is your date of birth?" 
+        LegendCssClass="govuk-fieldset__legend--m"
+        Hint="For example, 31 3 1980"
+        HasError="@hasDobError"
+        HasDayFieldError="@dobDayError"
+        HasMonthFieldError="@dobMonthError"
+        HasYearFieldError="@dobYearError"
+        ErrorMessage="@dobErrorMessage"
+        @bind-Day="dobDay" 
+        @bind-Month="dobMonth" 
+        @bind-Year="dobYear" />
+
+    <GovUkButton Type="submit">Continue</GovUkButton>
+</form>
+
+@if (dobSuccess)
+{
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-top-6">
+        <h2 class="govuk-panel__title">Date of birth accepted</h2>
+        <div class="govuk-panel__body">
+            Your date of birth is @dobDay/@dobMonth/@dobYear
+        </div>
+    </div>
+}
+
 @code {
     private string? day1;
     private string? month1;
@@ -23,4 +109,108 @@
     private string? day2 = "6";
     private string? month2 = "3";
     private string? year2 = "2076";
+
+    // Validated date example
+    private string? validatedDay;
+    private string? validatedMonth;
+    private string? validatedYear;
+    private bool hasValidatedDateError = false;
+    private bool validatedDayError = false;
+    private bool validatedMonthError = false;
+    private bool validatedYearError = false;
+    private string? validatedDateErrorMessage;
+    private bool showDateErrors = false;
+    private bool dateSuccess = false;
+    private List<GovUkErrorSummary.ErrorItem> dateErrorItems = new();
+
+    // Date of birth example
+    private string? dobDay;
+    private string? dobMonth;
+    private string? dobYear;
+    private bool hasDobError = false;
+    private bool dobDayError = false;
+    private bool dobMonthError = false;
+    private bool dobYearError = false;
+    private string? dobErrorMessage;
+    private bool showDobErrors = false;
+    private bool dobSuccess = false;
+    private List<GovUkErrorSummary.ErrorItem> dobErrorItems = new();
+
+    private void HandleDateSubmit()
+    {
+        dateSuccess = false;
+        showDateErrors = false;
+        hasValidatedDateError = false;
+        validatedDayError = false;
+        validatedMonthError = false;
+        validatedYearError = false;
+        validatedDateErrorMessage = null;
+        dateErrorItems.Clear();
+
+        var result = FormValidationService.ValidateDate(validatedDay, validatedMonth, validatedYear, "date");
+
+        if (!result.IsValid)
+        {
+            hasValidatedDateError = true;
+            validatedDayError = result.HasDayError;
+            validatedMonthError = result.HasMonthError;
+            validatedYearError = result.HasYearError;
+            validatedDateErrorMessage = result.ErrorMessage;
+            showDateErrors = true;
+            
+            var firstErrorField = validatedDayError ? "day" : (validatedMonthError ? "month" : "year");
+            dateErrorItems.Add(new GovUkErrorSummary.ErrorItem
+            {
+                Message = validatedDateErrorMessage ?? "Enter a valid date",
+                FieldId = $"validated-date-{firstErrorField}"
+            });
+        }
+        else
+        {
+            dateSuccess = true;
+        }
+    }
+
+    private void HandleDobSubmit()
+    {
+        dobSuccess = false;
+        showDobErrors = false;
+        hasDobError = false;
+        dobDayError = false;
+        dobMonthError = false;
+        dobYearError = false;
+        dobErrorMessage = null;
+        dobErrorItems.Clear();
+
+        var result = FormValidationService.ValidateDate(
+            dobDay, dobMonth, dobYear, 
+            "date of birth",
+            new FormValidationService.DateValidationOptions
+            {
+                MustBeInPast = true,
+                MinYear = 1900,
+                MaxYear = DateTime.Today.Year
+            });
+
+        if (!result.IsValid)
+        {
+            hasDobError = true;
+            dobDayError = result.HasDayError;
+            dobMonthError = result.HasMonthError;
+            dobYearError = result.HasYearError;
+            dobErrorMessage = result.ErrorMessage;
+            showDobErrors = true;
+            
+            var firstErrorField = dobDayError ? "day" : (dobMonthError ? "month" : "year");
+            dobErrorItems.Add(new GovUkErrorSummary.ErrorItem
+            {
+                Message = dobErrorMessage ?? "Enter a valid date of birth",
+                FieldId = $"dob-validated-{firstErrorField}"
+            });
+        }
+        else
+        {
+            dobSuccess = true;
+        }
+    }
 }

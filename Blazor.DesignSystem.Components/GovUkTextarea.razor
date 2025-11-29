@@ -16,7 +16,7 @@
     @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
     {
         <p id="@(Id)-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
         </p>
     }
     <textarea class="govuk-textarea @(HasError ? "govuk-textarea--error" : "") @TextareaCssClass" 
@@ -25,6 +25,7 @@
               rows="@Rows"
               disabled="@Disabled"
               aria-describedby="@GetAriaDescribedBy()"
+              aria-invalid="@(HasError ? "true" : null)"
               autocomplete="@Autocomplete"
               spellcheck="@(Spellcheck.HasValue ? Spellcheck.Value.ToString().ToLower() : null)"
               @oninput="HandleInput"
@@ -97,6 +98,12 @@
     /// </summary>
     [Parameter]
     public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// The autocomplete attribute value.

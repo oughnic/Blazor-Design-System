@@ -26,7 +26,7 @@
         @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
         {
             <p id="@(Name)-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+                <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
             </p>
         }
         <div class="govuk-radios @(IsSmall ? "govuk-radios--small" : "") @(IsInline ? "govuk-radios--inline" : "")" data-module="govuk-radios">
@@ -79,6 +79,12 @@
     /// </summary>
     [Parameter]
     public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// Whether to use smaller radios.

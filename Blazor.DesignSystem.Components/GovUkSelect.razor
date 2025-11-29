@@ -16,7 +16,7 @@
     @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
     {
         <p id="@(Id)-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+            <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
         </p>
     }
     <select class="govuk-select @(HasError ? "govuk-select--error" : "") @SelectCssClass" 
@@ -24,6 +24,7 @@
             name="@Name"
             disabled="@Disabled"
             aria-describedby="@GetAriaDescribedBy()"
+            aria-invalid="@(HasError ? "true" : null)"
             @onchange="HandleChange"
             @attributes="AdditionalAttributes">
         @ChildContent
@@ -90,6 +91,12 @@
     /// </summary>
     [Parameter]
     public string? ErrorMessage { get; set; }
+
+    /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
 
     /// <summary>
     /// The select options (should contain option elements).

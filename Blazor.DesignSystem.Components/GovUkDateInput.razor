@@ -26,21 +26,22 @@
         @if (HasError && !string.IsNullOrWhiteSpace(ErrorMessage))
         {
             <p id="@(Id)-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> @ErrorMessage
+                <span class="govuk-visually-hidden">@ErrorMessageVisuallyHiddenText:</span> @ErrorMessage
             </p>
         }
         <div class="govuk-date-input" id="@Id">
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-date-input__label" for="@(Id)-day">
-                        Day
+                        @DayLabel
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasError ? "govuk-input--error" : "")" 
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasDayError ? "govuk-input--error" : "")" 
                            id="@(Id)-day" 
-                           name="@(Name)-day" 
+                           name="@(Name ?? Id)-day" 
                            type="text"
                            inputmode="numeric"
                            pattern="[0-9]*"
+                           autocomplete="@(DayAutocomplete ?? Autocomplete)"
                            value="@Day"
                            @oninput="HandleDayInput">
                 </div>
@@ -48,14 +49,15 @@
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-date-input__label" for="@(Id)-month">
-                        Month
+                        @MonthLabel
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasError ? "govuk-input--error" : "")" 
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(HasMonthError ? "govuk-input--error" : "")" 
                            id="@(Id)-month" 
-                           name="@(Name)-month" 
+                           name="@(Name ?? Id)-month" 
                            type="text"
                            inputmode="numeric"
                            pattern="[0-9]*"
+                           autocomplete="@(MonthAutocomplete ?? Autocomplete)"
                            value="@Month"
                            @oninput="HandleMonthInput">
                 </div>
@@ -63,14 +65,15 @@
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-date-input__label" for="@(Id)-year">
-                        Year
+                        @YearLabel
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-4 @(HasError ? "govuk-input--error" : "")" 
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4 @(HasYearError ? "govuk-input--error" : "")" 
                            id="@(Id)-year" 
-                           name="@(Name)-year" 
+                           name="@(Name ?? Id)-year" 
                            type="text"
                            inputmode="numeric"
                            pattern="[0-9]*"
+                           autocomplete="@(YearAutocomplete ?? Autocomplete)"
                            value="@Year"
                            @oninput="HandleYearInput">
                 </div>
@@ -153,10 +156,34 @@
     public EventCallback<string?> YearChanged { get; set; }
 
     /// <summary>
-    /// Whether the field has an error.
+    /// Whether the entire date field has an error.
     /// </summary>
     [Parameter]
     public bool HasError { get; set; }
+
+    /// <summary>
+    /// Whether the day field specifically has an error.
+    /// When true, applies error styling only to the day input.
+    /// When HasError is true and this is not set, all fields get error styling.
+    /// </summary>
+    [Parameter]
+    public bool? HasDayFieldError { get; set; }
+
+    /// <summary>
+    /// Whether the month field specifically has an error.
+    /// When true, applies error styling only to the month input.
+    /// When HasError is true and this is not set, all fields get error styling.
+    /// </summary>
+    [Parameter]
+    public bool? HasMonthFieldError { get; set; }
+
+    /// <summary>
+    /// Whether the year field specifically has an error.
+    /// When true, applies error styling only to the year input.
+    /// When HasError is true and this is not set, all fields get error styling.
+    /// </summary>
+    [Parameter]
+    public bool? HasYearFieldError { get; set; }
 
     /// <summary>
     /// The error message to display.
@@ -165,10 +192,63 @@
     public string? ErrorMessage { get; set; }
 
     /// <summary>
+    /// The visually hidden text before the error message. Defaults to "Error".
+    /// </summary>
+    [Parameter]
+    public string ErrorMessageVisuallyHiddenText { get; set; } = "Error";
+
+    /// <summary>
+    /// Label for the day field. Defaults to "Day".
+    /// </summary>
+    [Parameter]
+    public string DayLabel { get; set; } = "Day";
+
+    /// <summary>
+    /// Label for the month field. Defaults to "Month".
+    /// </summary>
+    [Parameter]
+    public string MonthLabel { get; set; } = "Month";
+
+    /// <summary>
+    /// Label for the year field. Defaults to "Year".
+    /// </summary>
+    [Parameter]
+    public string YearLabel { get; set; } = "Year";
+
+    /// <summary>
+    /// Autocomplete value for all date fields.
+    /// </summary>
+    [Parameter]
+    public string? Autocomplete { get; set; }
+
+    /// <summary>
+    /// Autocomplete value specifically for the day field.
+    /// </summary>
+    [Parameter]
+    public string? DayAutocomplete { get; set; }
+
+    /// <summary>
+    /// Autocomplete value specifically for the month field.
+    /// </summary>
+    [Parameter]
+    public string? MonthAutocomplete { get; set; }
+
+    /// <summary>
+    /// Autocomplete value specifically for the year field.
+    /// </summary>
+    [Parameter]
+    public string? YearAutocomplete { get; set; }
+
+    /// <summary>
     /// Additional CSS classes to apply to the form group.
     /// </summary>
     [Parameter]
     public string? CssClass { get; set; }
+
+    // Computed error state for individual fields
+    private bool HasDayError => HasDayFieldError ?? (HasError && !HasMonthFieldError.HasValue && !HasYearFieldError.HasValue);
+    private bool HasMonthError => HasMonthFieldError ?? (HasError && !HasDayFieldError.HasValue && !HasYearFieldError.HasValue);
+    private bool HasYearError => HasYearFieldError ?? (HasError && !HasDayFieldError.HasValue && !HasMonthFieldError.HasValue);
 
     private async Task HandleDayInput(ChangeEventArgs e)
     {
