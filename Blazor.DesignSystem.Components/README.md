@@ -20,10 +20,18 @@ Install-Package Blazor.DesignSystem.Components
 
 ### 1. Add the GOV.UK Frontend CSS
 
-Add the GOV.UK Frontend CSS to your `App.razor` or `_Host.cshtml`:
+Add the bundled GOV.UK Frontend CSS to your `App.razor` or `_Host.cshtml`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend@5.4.0/dist/govuk/govuk-frontend.min.css">
+<link rel="stylesheet" href="_content/Blazor.DesignSystem.Components/css/govuk-frontend.css" />
+```
+
+This CSS file is bundled with the package and includes all necessary GOV.UK Design System styles, fonts, and images.
+
+Optionally, you can also include the accessibility JavaScript helper for focus management:
+
+```html
+<script src="_content/Blazor.DesignSystem.Components/js/govuk-accessibility.js"></script>
 ```
 
 ### 2. Add the namespace
